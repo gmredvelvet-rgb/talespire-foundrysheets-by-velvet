@@ -1,0 +1,847 @@
+/* Stoneshard theme for PF2e. The native PF2e template and listeners remain intact. */
+
+.actor.sheet.character.stoneshard-pf2e {
+  --sss-pf-black: #0b0909;
+  --sss-pf-panel: #171311;
+  --sss-pf-gold: #c99a45;
+  --sss-pf-gold-hi: #efd58d;
+  --sss-pf-line: #76562d;
+  --color-pf-primary: #762d29;
+  --color-pf-primary-dark: #32100f;
+  --color-pf-primary-light: #9f453d;
+  --color-pf-secondary: #171311;
+  --color-pf-secondary-lighter: #76562d;
+  --color-pf-tertiary: #c99a45;
+  --color-pf-tertiary-light: #efd58d;
+  --sidebar-title: #c99a45;
+  --sidebar-label: #e1cfaa;
+}
+
+.actor.sheet.character.stoneshard-pf2e section.window-content {
+  background: var(--sss-pf-black);
+  padding: 0;
+}
+
+.actor.sheet.character.stoneshard-pf2e section.window-content form.crb-style {
+  background-color: var(--sss-pf-panel);
+  background-image:
+    linear-gradient(rgb(12 9 8 / 72%), rgb(12 9 8 / 72%)),
+    url("../assets/ui/stone_tile.png");
+  color: #d8c7a3;
+}
+
+.actor.sheet.character.stoneshard-pf2e section.window-content form.crb-style header.char-header {
+  background: linear-gradient(90deg, #15100d 0%, #2a1d14 55%, #15100d 100%);
+  border-bottom: 1px solid var(--sss-pf-line);
+}
+
+.actor.sheet.character.stoneshard-pf2e section.window-content form.crb-style nav.sheet-navigation {
+  background: #120f0d;
+  border-color: var(--sss-pf-line);
+  box-shadow: inset 0 1px rgb(255 255 255 / 5%), 0 2px 5px rgb(0 0 0 / 55%);
+}
+
+.actor.sheet.character.stoneshard-pf2e section.window-content form.crb-style nav.sheet-navigation .item {
+  background-color: #211a16;
+  background-image: none;
+  border-radius: 2px;
+  color: #ad8a4c;
+  fill: #ad8a4c;
+  box-shadow: inset 0 0 0 1px #090706, 0 0 0 1px var(--sss-pf-line);
+}
+
+.actor.sheet.character.stoneshard-pf2e section.window-content form.crb-style nav.sheet-navigation .item:hover,
+.actor.sheet.character.stoneshard-pf2e section.window-content form.crb-style nav.sheet-navigation .item.active {
+  background-image: none;
+  background-color: #3a2719;
+  color: var(--sss-pf-gold-hi);
+  fill: var(--sss-pf-gold-hi);
+  box-shadow: inset 0 0 0 1px #090706, 0 0 0 1px var(--sss-pf-gold), 0 0 7px rgb(201 154 69 / 45%);
+}
+
+.actor.sheet.character.stoneshard-pf2e section.window-content form.crb-style aside {
+  background-color: #110e0c;
+  border-right: 1px solid var(--sss-pf-line);
+}
+
+.actor.sheet.character.stoneshard-pf2e section.window-content form.crb-style .sheet-content {
+  background: rgb(225 214 190 / 95%);
+}
+
+.actor.sheet.character.stoneshard-pf2e ::-webkit-scrollbar {
+  height: 9px;
+  width: 9px;
+}
+
+.actor.sheet.character.stoneshard-pf2e ::-webkit-scrollbar-track {
+  background: #100d0b;
+}
+
+.actor.sheet.character.stoneshard-pf2e ::-webkit-scrollbar-thumb {
+  background: #5e4529;
+  border: 1px solid #17110c;
+}
+
+/* Narrow TaleSpire / VN Enhanced layout. */
+.actor.sheet.character:is(.stoneshard-pf2e-vn, .stoneshard-pf2e-symbiote) {
+  min-width: 360px;
+}
+
+.actor.sheet.character:is(.stoneshard-pf2e-vn, .stoneshard-pf2e-symbiote) section.window-content form.crb-style {
+  grid: "header" auto "nav" auto "sidebar" minmax(170px, 29vh) "content" minmax(0, 1fr) / minmax(0, 1fr);
+  min-height: 0;
+  min-width: 0;
+}
+
+.actor.sheet.character:is(.stoneshard-pf2e-vn, .stoneshard-pf2e-symbiote) section.window-content form.crb-style > * {
+  min-width: 0;
+}
+
+.actor.sheet.character:is(.stoneshard-pf2e-vn, .stoneshard-pf2e-symbiote) section.window-content form.crb-style header.char-header {
+  gap: 4px;
+  min-height: 54px;
+  padding: 5px 7px;
+}
+
+.actor.sheet.character:is(.stoneshard-pf2e-vn, .stoneshard-pf2e-symbiote) section.window-content form.crb-style header.char-header .char-details {
+  margin-left: 0;
+  min-width: 0;
+}
+
+.actor.sheet.character:is(.stoneshard-pf2e-vn, .stoneshard-pf2e-symbiote) section.window-content form.crb-style header.char-header .char-details h1.char-name input[type="text"] {
+  font-size: var(--font-size-18);
+  max-width: 100%;
+}
+
+.actor.sheet.character:is(.stoneshard-pf2e-vn, .stoneshard-pf2e-symbiote) section.window-content form.crb-style header.char-header .char-level {
+  flex: 0 0 auto;
+  padding: 0;
+}
+
+.actor.sheet.character:is(.stoneshard-pf2e-vn, .stoneshard-pf2e-symbiote) section.window-content form.crb-style header.char-header .char-level .exp-data {
+  display: none;
+}
+
+.actor.sheet.character:is(.stoneshard-pf2e-vn, .stoneshard-pf2e-symbiote) section.window-content form.crb-style nav.sheet-navigation {
+  box-sizing: border-box;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  height: auto;
+  justify-content: flex-start;
+  min-height: 34px;
+  padding: 5px 7px;
+  width: 100%;
+}
+
+.actor.sheet.character:is(.stoneshard-pf2e-vn, .stoneshard-pf2e-symbiote) section.window-content form.crb-style nav.sheet-navigation .panel-title {
+  flex: 1 0 100%;
+  padding-left: 0;
+}
+
+.actor.sheet.character:is(.stoneshard-pf2e-vn, .stoneshard-pf2e-symbiote) section.window-content form.crb-style nav.sheet-navigation .item {
+  flex: 0 0 24px;
+  height: 24px;
+  margin: 0;
+  width: 24px;
+}
+
+.actor.sheet.character:is(.stoneshard-pf2e-vn, .stoneshard-pf2e-symbiote) section.window-content form.crb-style aside {
+  background-image: none;
+  border-bottom: 1px solid var(--sss-pf-line);
+  border-right: 0;
+  margin: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.actor.sheet.character:is(.stoneshard-pf2e-vn, .stoneshard-pf2e-symbiote) section.window-content form.crb-style aside .logo {
+  display: none;
+}
+
+.actor.sheet.character:is(.stoneshard-pf2e-vn, .stoneshard-pf2e-symbiote) section.window-content form.crb-style aside .sidebar {
+  box-sizing: border-box;
+  height: 100%;
+  overflow-y: auto;
+  padding: 4px 10px 12px;
+  scrollbar-gutter: stable;
+}
+
+.actor.sheet.character:is(.stoneshard-pf2e-vn, .stoneshard-pf2e-symbiote) section.window-content form.crb-style .sheet-body {
+  min-height: 0;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.actor.sheet.character:is(.stoneshard-pf2e-vn, .stoneshard-pf2e-symbiote) section.window-content form.crb-style .sheet-body .sheet-content,
+.actor.sheet.character:is(.stoneshard-pf2e-vn, .stoneshard-pf2e-symbiote) section.window-content form.crb-style .sheet-body .sheet-content .inventory {
+  min-width: 0;
+}
+
+.actor.sheet.character:is(.stoneshard-pf2e-vn, .stoneshard-pf2e-symbiote) section.window-content form.crb-style .sheet-body .sheet-content > .tab.active {
+  box-sizing: border-box;
+  height: 100%;
+  max-width: 100%;
+  overflow: auto;
+  padding: 8px 7px 14px;
+  scrollbar-gutter: stable;
+}
+
+.actor.sheet.character:is(.stoneshard-pf2e-vn, .stoneshard-pf2e-symbiote) section.window-content form.crb-style .sheet-body .sheet-content > .tab.active.character .subsection.details {
+  grid: "img details" auto / 82px minmax(0, 1fr);
+}
+
+.actor.sheet.character:is(.stoneshard-pf2e-vn, .stoneshard-pf2e-symbiote) section.window-content form.crb-style .sheet-body .sheet-content > .tab.active.character .subsection.details .image-container {
+  max-height: 116px;
+}
+
+.actor.sheet.character:is(.stoneshard-pf2e-vn, .stoneshard-pf2e-symbiote) section.window-content form.crb-style .sheet-body .sheet-content > .tab.active.character .subsection.details .abcd {
+  grid-template-columns: minmax(0, 1fr);
+  padding-left: 8px;
+}
+
+.actor.sheet.character:is(.stoneshard-pf2e-vn, .stoneshard-pf2e-symbiote) section.window-content form.crb-style .sheet-body .sheet-content > .tab.active.character .subsection.details .abcd .traits {
+  grid-column: 1;
+}
+
+.actor.sheet.character:is(.stoneshard-pf2e-vn, .stoneshard-pf2e-symbiote) section.window-content form.crb-style .sheet-body .sheet-content > .tab.active.character .subsection.background label {
+  flex-basis: 48%;
+}
+
+.actor.sheet.character:is(.stoneshard-pf2e-vn, .stoneshard-pf2e-symbiote) section.window-content form.crb-style .sheet-body .sheet-content > .tab.active.character .subsection.attributes ul {
+  column-gap: 3px;
+}
+
+.actor.sheet.character:is(.stoneshard-pf2e-vn, .stoneshard-pf2e-symbiote) section.window-content form.crb-style .sheet-body .sheet-content .item-name {
+  min-width: 8rem;
+}
+
+.actor.sheet.character:is(.stoneshard-pf2e-vn, .stoneshard-pf2e-symbiote) section.window-content form.crb-style .sheet-body .sheet-content ol.spell-list,
+.actor.sheet.character:is(.stoneshard-pf2e-vn, .stoneshard-pf2e-symbiote) section.window-content form.crb-style .sheet-body .sheet-content .item-list,
+.actor.sheet.character:is(.stoneshard-pf2e-vn, .stoneshard-pf2e-symbiote) section.window-content form.crb-style .sheet-body .sheet-content .directory-list {
+  max-width: 100%;
+  min-width: 0;
+}
+
+@media (max-width: 420px) {
+  .actor.sheet.character:is(.stoneshard-pf2e-vn, .stoneshard-pf2e-symbiote) {
+    min-width: 330px;
+  }
+
+  .actor.sheet.character:is(.stoneshard-pf2e-vn, .stoneshard-pf2e-symbiote) section.window-content form.crb-style .sheet-body .sheet-content > .tab.active.character .subsection.details {
+    grid: "img" auto "details" auto / minmax(0, 1fr);
+  }
+
+  .actor.sheet.character:is(.stoneshard-pf2e-vn, .stoneshard-pf2e-symbiote) section.window-content form.crb-style .sheet-body .sheet-content > .tab.active.character .subsection.details .image-container {
+    justify-self: center;
+    width: 96px;
+  }
+}
+
+/* Purpose-built 440px interface for TaleSpire's Symbiote web panel. */
+.actor.sheet.character.stoneshard-pf2e-symbiote {
+  height: min(930px, calc(100vh - 8px)) !important;
+  max-height: calc(100vh - 8px);
+  min-height: 560px;
+  width: min(440px, 100vw) !important;
+}
+
+.actor.sheet.character.stoneshard-pf2e-symbiote .window-header {
+  min-height: 27px;
+  padding: 0 5px;
+}
+
+.actor.sheet.character.stoneshard-pf2e-symbiote section.window-content form.crb-style {
+  grid: "header" auto "nav" auto "content" minmax(0, 1fr) / minmax(0, 1fr);
+}
+
+.actor.sheet.character.stoneshard-pf2e-symbiote section.window-content form.crb-style > aside {
+  display: none;
+}
+
+.actor.sheet.character.stoneshard-pf2e-symbiote section.window-content form.crb-style header.char-header {
+  min-height: 46px;
+  padding: 3px 6px;
+}
+
+.actor.sheet.character.stoneshard-pf2e-symbiote section.window-content form.crb-style header.char-header .char-portrait,
+.actor.sheet.character.stoneshard-pf2e-symbiote section.window-content form.crb-style header.char-header .char-level .exp-data {
+  display: none;
+}
+
+.actor.sheet.character.stoneshard-pf2e-symbiote section.window-content form.crb-style nav.sheet-navigation {
+  align-items: center;
+  display: grid;
+  gap: 3px;
+  grid-template-columns: repeat(10, minmax(24px, 1fr));
+  min-height: 34px;
+  padding: 4px 5px;
+  position: relative;
+  z-index: 5;
+}
+
+.actor.sheet.character.stoneshard-pf2e-symbiote section.window-content form.crb-style nav.sheet-navigation .panel-title {
+  display: none;
+}
+
+.actor.sheet.character.stoneshard-pf2e-symbiote section.window-content form.crb-style nav.sheet-navigation .item,
+.actor.sheet.character.stoneshard-pf2e-symbiote section.window-content form.crb-style nav.sheet-navigation .manage-tabs {
+  align-items: center;
+  display: flex;
+  height: 26px;
+  justify-content: center;
+  margin: 0;
+  min-width: 0;
+  padding: 0;
+  width: 100%;
+}
+
+.actor.sheet.character.stoneshard-pf2e-symbiote section.window-content form.crb-style .sheet-body {
+  grid-area: content;
+}
+
+.actor.sheet.character.stoneshard-pf2e-symbiote section.window-content form.crb-style .sheet-body .sheet-content > .tab.active {
+  padding: 0 5px 10px;
+}
+
+.actor.sheet.character.stoneshard-pf2e-symbiote .sss-compact-toolbar {
+  align-items: center;
+  background: #120f0d;
+  border-bottom: 1px solid var(--sss-pf-line);
+  display: grid;
+  gap: 4px;
+  grid-template-columns: minmax(0, 1fr) 28px 28px;
+  margin: 0 -5px 6px;
+  padding: 5px;
+  position: sticky;
+  top: 0;
+  z-index: 12;
+}
+
+.actor.sheet.character.stoneshard-pf2e-symbiote .sss-search {
+  align-items: center;
+  background: #211a16;
+  border: 1px solid #654823;
+  display: grid;
+  gap: 5px;
+  grid-template-columns: 18px minmax(0, 1fr);
+  min-width: 0;
+  padding: 0 6px;
+}
+
+.actor.sheet.character.stoneshard-pf2e-symbiote .sss-search i {
+  color: var(--sss-pf-gold);
+  text-align: center;
+}
+
+.actor.sheet.character.stoneshard-pf2e-symbiote .sss-search input[type="search"] {
+  background: transparent;
+  border: 0;
+  color: #efe3c8;
+  font-size: var(--font-size-12);
+  height: 27px;
+  min-width: 0;
+  padding: 0;
+  width: 100%;
+}
+
+.actor.sheet.character.stoneshard-pf2e-symbiote .sss-compact-toolbar > button,
+.actor.sheet.character.stoneshard-pf2e-symbiote .sss-section-toggle {
+  align-items: center;
+  background: #2b2119;
+  border: 1px solid #76562d;
+  border-radius: 2px;
+  color: var(--sss-pf-gold-hi);
+  display: inline-flex;
+  height: 28px;
+  justify-content: center;
+  line-height: 1;
+  margin: 0;
+  padding: 0;
+  width: 28px;
+}
+
+.actor.sheet.character.stoneshard-pf2e-symbiote .sss-section-toggle {
+  flex: 0 0 21px;
+  height: 21px;
+  margin-right: 5px;
+  width: 21px;
+}
+
+.actor.sheet.character.stoneshard-pf2e-symbiote .sss-section-toggle i {
+  transition: transform 120ms ease;
+}
+
+.actor.sheet.character.stoneshard-pf2e-symbiote .sss-is-collapsed .sss-section-toggle i {
+  transform: rotate(-90deg);
+}
+
+.actor.sheet.character.stoneshard-pf2e-symbiote .sss-section-hidden,
+.actor.sheet.character.stoneshard-pf2e-symbiote .sss-filtered-out,
+.actor.sheet.character.stoneshard-pf2e-symbiote .sss-filter-empty {
+  display: none !important;
+}
+
+/* Actions: the three PF2e contexts remain native, but become a readable segmented control. */
+.actor.sheet.character.stoneshard-pf2e-symbiote .tab.actions > nav.actions-nav {
+  background: #171311;
+  display: grid;
+  gap: 4px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: 0 -5px;
+  padding: 5px;
+  position: sticky;
+  top: 0;
+  z-index: 14;
+}
+
+.actor.sheet.character.stoneshard-pf2e-symbiote .tab.actions > nav.actions-nav a.tab {
+  align-items: center;
+  background: #211a16;
+  border: 1px solid #5e4529;
+  color: #c9b488;
+  display: flex;
+  font-size: var(--font-size-11);
+  font-weight: 700;
+  justify-content: center;
+  min-width: 0;
+  padding: 6px 2px;
+  text-align: center;
+}
+
+.actor.sheet.character.stoneshard-pf2e-symbiote .tab.actions > nav.actions-nav a.tab.active {
+  background: #5b251f;
+  border-color: var(--sss-pf-gold);
+  color: #fff1c7;
+}
+
+.actor.sheet.character.stoneshard-pf2e-symbiote .tab.actions .sss-compact-toolbar {
+  top: 34px;
+}
+
+.actor.sheet.character.stoneshard-pf2e-symbiote .actions-panel > header,
+.actor.sheet.character.stoneshard-pf2e-symbiote .feat-section > header,
+.actor.sheet.character.stoneshard-pf2e-symbiote .inventory-list > header {
+  align-items: center;
+  display: flex;
+  min-height: 30px;
+  padding: 4px 5px;
+}
+
+.actor.sheet.character.stoneshard-pf2e-symbiote .actions-panel > header .controls,
+.actor.sheet.character.stoneshard-pf2e-symbiote .feat-section > header .controls {
+  margin-left: auto;
+}
+
+.actor.sheet.character.stoneshard-pf2e-symbiote .actions-panel > header.sss-generated-action-header {
+  background: linear-gradient(90deg, #351813, #6b3028 70%, #351813);
+  border: 1px solid #8d6335;
+  color: #f2ddb0;
+  margin-top: 5px;
+}
+
+.actor.sheet.character.stoneshard-pf2e-symbiote .sss-action-category-title {
+  align-items: center;
+  display: inline-flex;
+  font-size: var(--font-size-12);
+  font-weight: 700;
+  gap: 6px;
+  min-width: 0;
+  text-transform: uppercase;
+}
+
+.actor.sheet.character.stoneshard-pf2e-symbiote .sss-action-category-title i {
+  color: #e6b85f;
+  flex: 0 0 auto;
+  text-align: center;
+  width: 15px;
+}
+
+.actor.sheet.character.stoneshard-pf2e-symbiote .sss-action-count {
+  align-items: center;
+  background: #170d0b;
+  border: 1px solid #9b713c;
+  border-radius: 50%;
+  display: inline-flex;
+  font-size: var(--font-size-10);
+  height: 20px;
+  justify-content: center;
+  margin-left: auto;
+  min-width: 20px;
+  padding: 0 4px;
+}
+
+.actor.sheet.character.stoneshard-pf2e-symbiote .sss-action-context {
+  color: #8b5a36;
+  display: block;
+  font-size: var(--font-size-9);
+  font-weight: 700;
+  line-height: 1.15;
+  margin-top: 2px;
+  text-transform: uppercase;
+}
+
+.actor.sheet.character.stoneshard-pf2e-symbiote .actions-panel > header .controls button,
+.actor.sheet.character.stoneshard-pf2e-symbiote .feat-section > header .controls button {
+  font-size: 0;
+  height: 23px;
+  margin: 0 0 0 3px;
+  min-width: 23px;
+  padding: 0;
+  width: 23px;
+}
+
+.actor.sheet.character.stoneshard-pf2e-symbiote .actions-panel > header .controls button i,
+.actor.sheet.character.stoneshard-pf2e-symbiote .feat-section > header .controls button i {
+  font-size: var(--font-size-11);
+  margin: 0;
+}
+
+.actor.sheet.character.stoneshard-pf2e-symbiote .actions-list li.action {
+  grid-template-columns: 34px minmax(0, 1fr) auto;
+  min-height: 38px;
+}
+
+.actor.sheet.character.stoneshard-pf2e-symbiote .actions-list li.action .button-group {
+  grid-column: 3;
+}
+
+.actor.sheet.character.stoneshard-pf2e-symbiote .actions-list li.action .frequency,
+.actor.sheet.character.stoneshard-pf2e-symbiote .actions-list li.action .activate {
+  grid-column: 2 / -1;
+}
+
+.actor.sheet.character.stoneshard-pf2e-symbiote .actions-list li.action .item-controls {
+  opacity: 0.72;
+}
+
+.actor.sheet.character.stoneshard-pf2e-symbiote .actions-list li.strike {
+  max-width: 100%;
+  min-width: 0;
+}
+
+.actor.sheet.character.stoneshard-pf2e-symbiote .actions-list li.strike .button-groups {
+  flex-wrap: wrap;
+  min-width: 0;
+}
+
+.actor.sheet.character.stoneshard-pf2e-symbiote .sss-elemental-blasts li.strike {
+  align-items: start;
+  display: grid;
+  gap: 5px;
+  grid-template-columns: 36px minmax(0, 1fr);
+  padding: 5px 3px;
+}
+
+.actor.sheet.character.stoneshard-pf2e-symbiote .sss-elemental-blasts li.strike > .item-image {
+  height: 34px;
+  width: 34px;
+}
+
+.actor.sheet.character.stoneshard-pf2e-symbiote .sss-elemental-blasts li.strike .button-groups {
+  display: flex;
+  gap: 4px;
+}
+
+.actor.sheet.character.stoneshard-pf2e-symbiote .sss-elemental-blasts li.strike .button-group.tags {
+  display: flex;
+  flex: 1 1 100%;
+  flex-wrap: wrap;
+  gap: 3px;
+  min-width: 0;
+}
+
+.actor.sheet.character.stoneshard-pf2e-symbiote .sss-elemental-blasts li.strike .button-group.tags > button {
+  flex: 0 1 auto;
+  font-size: var(--font-size-9);
+  min-height: 22px;
+  min-width: 28px;
+  padding: 2px 5px;
+  white-space: normal;
+}
+
+.actor.sheet.character.stoneshard-pf2e-symbiote .sss-elemental-blasts li.strike .alt-usage {
+  display: grid;
+  gap: 3px;
+  grid-template-columns: 16px minmax(0, 1fr);
+  width: 100%;
+}
+
+.actor.sheet.character.stoneshard-pf2e-symbiote .sss-elemental-blasts li.strike .alt-usage .button-group {
+  min-width: 0;
+}
+
+/* Feats and spells become category accordions instead of one very long page. */
+.actor.sheet.character.stoneshard-pf2e-symbiote .feat-section {
+  border: 1px solid rgb(118 86 45 / 45%);
+  margin-bottom: 6px;
+}
+
+.actor.sheet.character.stoneshard-pf2e-symbiote .feat-section > header {
+  position: sticky;
+  top: 39px;
+  z-index: 7;
+}
+
+.actor.sheet.character.stoneshard-pf2e-symbiote .feats-list li.slot {
+  grid-template-columns: minmax(0, 1fr) auto;
+  min-height: 40px;
+}
+
+.actor.sheet.character.stoneshard-pf2e-symbiote .feats-list .feat-slot-title {
+  font-size: var(--font-size-10);
+  max-width: 72px;
+}
+
+.actor.sheet.character.stoneshard-pf2e-symbiote .spellcasting-entry {
+  border: 1px solid rgb(118 86 45 / 50%);
+  margin-bottom: 6px;
+}
+
+.actor.sheet.character.stoneshard-pf2e-symbiote .spellcasting-entry > .action-header {
+  align-items: center;
+  background: #2a211b;
+  display: flex;
+  min-height: 34px;
+  padding: 3px 5px;
+}
+
+.actor.sheet.character.stoneshard-pf2e-symbiote .spellcasting-entry > .action-header .sss-section-toggle {
+  order: -2;
+}
+
+.actor.sheet.character.stoneshard-pf2e-symbiote .spellcasting-entry > .action-header .drag-handle {
+  order: -1;
+}
+
+.actor.sheet.character.stoneshard-pf2e-symbiote .spellcasting-entry > .action-header h3.item-name {
+  min-width: 0;
+}
+
+.actor.sheet.character.stoneshard-pf2e-symbiote .spellcasting-entry > .action-header h3.item-name input {
+  max-width: 100%;
+}
+
+.actor.sheet.character.stoneshard-pf2e-symbiote .spell-ability-data {
+  display: grid;
+  gap: 4px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+/* Inventory keeps the native item behaviors but removes columns that cannot fit at 440px. */
+.actor.sheet.character.stoneshard-pf2e-symbiote .inventory-list > header .price,
+.actor.sheet.character.stoneshard-pf2e-symbiote .inventory-list > header .bulk,
+.actor.sheet.character.stoneshard-pf2e-symbiote .inventory-list > ul.items > li .price,
+.actor.sheet.character.stoneshard-pf2e-symbiote .inventory-list > ul.items > li .bulk {
+  display: none;
+}
+
+.actor.sheet.character.stoneshard-pf2e-symbiote .inventory-list > header .item-name,
+.actor.sheet.character.stoneshard-pf2e-symbiote .inventory-list > ul.items > li .item-name {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.actor.sheet.character.stoneshard-pf2e-symbiote .inventory-list > header .quantity,
+.actor.sheet.character.stoneshard-pf2e-symbiote .inventory-list > ul.items > li .quantity {
+  flex: 0 0 34px;
+}
+
+@media (max-height: 700px) {
+  .actor.sheet.character.stoneshard-pf2e-symbiote {
+    min-height: 480px;
+  }
+
+  .actor.sheet.character.stoneshard-pf2e-symbiote section.window-content form.crb-style header.char-header {
+    min-height: 40px;
+  }
+}
+
+/* Stoneshard PF2e action browser: compact enough for the TaleSpire Symbiote. */
+.sss-window.stoneshard-pf2e-real .sss-action-section {
+  margin-bottom: 8px;
+}
+
+.sss-window.stoneshard-pf2e-real .sss-action-row {
+  min-height: 38px;
+}
+
+.sss-window.stoneshard-pf2e-real .sss-action-cost {
+  align-items: center;
+  border: 1px solid rgb(184 146 79 / 70%);
+  color: var(--sss-gold-hi);
+  display: inline-flex;
+  flex: 0 0 22px;
+  font-family: Georgia, serif;
+  font-size: 12px;
+  height: 22px;
+  justify-content: center;
+}
+
+.sss-window.stoneshard-pf2e-real .sss-action-frequency {
+  color: var(--sss-ink-dim);
+  flex: 0 1 auto;
+  font-size: 9px;
+  max-width: 82px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sss-window.stoneshard-pf2e-real .sss-strike-buttons {
+  align-items: center;
+  display: flex;
+  flex: 0 1 auto;
+  flex-wrap: wrap;
+  gap: 3px;
+  justify-content: flex-end;
+}
+
+.sss-window.stoneshard-pf2e-real .sss-strike-buttons .sss-mini-btn {
+  min-width: 28px;
+  padding: 2px 5px;
+}
+
+.sss-window.stoneshard-pf2e-real .sss-strike-buttons .is-damage {
+  color: #d5b777;
+}
+
+.sss-window.stoneshard-pf2e-real .sss-strike-buttons .is-critical {
+  color: #d68272;
+}
+
+.sss-window.stoneshard-pf2e-real .sss-exploration-toggle {
+  align-items: center;
+  background: #0d0c0a;
+  border: 1px solid var(--sss-line-soft);
+  color: var(--sss-ink-dim);
+  display: inline-flex;
+  flex: 0 0 24px;
+  height: 24px;
+  justify-content: center;
+  padding: 0;
+}
+
+.sss-window.stoneshard-pf2e-real .sss-exploration-toggle.is-active {
+  border-color: var(--sss-gold);
+  color: var(--sss-gold-hi);
+  box-shadow: inset 0 0 7px rgb(198 157 82 / 22%);
+}
+
+.sss-window.stoneshard-pf2e-real .sss-node-name em {
+  color: var(--sss-ink-dim);
+  display: block;
+  font-size: 9px;
+  font-style: normal;
+  margin-top: 1px;
+}
+
+@media (max-width: 760px) {
+  .sss-window.stoneshard-pf2e-real .sss-action-row {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .sss-window.stoneshard-pf2e-real .sss-strike-buttons {
+    flex: 1 0 100%;
+    justify-content: flex-start;
+    padding-left: 40px;
+  }
+}
+
+
+/* ==========================================================================
+   Symbiote Optimized (TaleSpire) — una sola columna de ~520 px.
+   El diseño de tres columnas se recortaba; aquí el raíl pasa a ser una barra
+   superior, el retrato queda como banda y el panel ocupa todo el ancho.
+   ========================================================================== */
+
+.sss-window.sss-layout-symbiote { min-width: 360px; }
+
+.sss-window.sss-layout-symbiote .sss-root {
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto auto minmax(0, 1fr);
+}
+
+/* Raíl → barra superior: identidad + acciones, y navegación en 4×2 */
+.sss-window.sss-layout-symbiote .sss-rail {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-template-areas: "badge id actions" "nav nav nav";
+  align-items: center;
+  column-gap: 10px;
+  row-gap: 6px;
+  padding: 8px 10px 6px;
+  border-right: 0;
+  border-bottom: 1px solid var(--sss-line-soft);
+}
+.sss-window.sss-layout-symbiote .sss-badge {
+  grid-area: badge;
+  width: 30px;
+  height: 30px;
+  margin: 0 4px;
+}
+.sss-window.sss-layout-symbiote .sss-badge-num { font-size: 13px; }
+.sss-window.sss-layout-symbiote .sss-rail-id {
+  grid-area: id;
+  min-width: 0;
+  margin: 0;
+  text-align: left;
+}
+.sss-window.sss-layout-symbiote .sss-rail-name,
+.sss-window.sss-layout-symbiote .sss-rail-sub {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.sss-window.sss-layout-symbiote .sss-rail-actions {
+  grid-area: actions;
+  display: flex;
+  gap: 3px;
+  padding: 0;
+  border-top: 0;
+}
+.sss-window.sss-layout-symbiote .sss-rail-actions button { width: 24px; height: 24px; font-size: 10px; }
+.sss-window.sss-layout-symbiote .sss-nav {
+  grid-area: nav;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 2px;
+  overflow: visible;
+}
+.sss-window.sss-layout-symbiote .sss-nav-item {
+  min-width: 0;
+  gap: 5px;
+  padding: 5px 6px;
+  border-left: 0;
+  border-bottom: 2px solid transparent;
+  font-size: 10px;
+  letter-spacing: .6px;
+  white-space: nowrap;
+}
+.sss-window.sss-layout-symbiote .sss-nav-item > span { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.sss-window.sss-layout-symbiote .sss-nav-item.is-active {
+  border-bottom-color: var(--sss-gold);
+  background: linear-gradient(0deg, #2a2116, transparent);
+}
+
+/* Retrato → banda; con el paperdoll crece lo justo para mostrarlo entero */
+.sss-window.sss-layout-symbiote .sss-stage {
+  border-right: 0;
+  border-bottom: 1px solid var(--sss-line-soft);
+}
+.sss-window.sss-layout-symbiote .sss-stage-art { flex: 0 0 auto; height: 130px; }
+.sss-window.sss-layout-symbiote .sss-stage-img { object-position: center 18%; }
+.sss-window.sss-layout-symbiote .sss-stage-foot { display: none; }
+/* Con paperdoll: el tablero fija la altura (sin :has ni cqi, que el Chromium de TaleSpire puede no soportar) */
+.sss-window.sss-layout-symbiote .sss-stage-art.sss-has-doll { height: auto; }
+.sss-window.sss-layout-symbiote .sss-stage-art.sss-has-doll .sss-stage-img {
+  position: absolute;
+  inset: 0;
+}
+.sss-window.sss-layout-symbiote .sss-stage-art.sss-has-doll .sss-doll-overlay { position: relative; inset: auto; }
+.sss-window.sss-layout-symbiote .sss-doll-board { max-width: 380px; }
+
+/* Panel a todo el ancho; es el único que desplaza. `--sss-cell` lo calcula el script. */
+.sss-window.sss-layout-symbiote .sss-panel { padding: 10px 10px 16px; }
+.sss-window.sss-layout-symbiote .sss-grid-wrap { padding: 4px; }

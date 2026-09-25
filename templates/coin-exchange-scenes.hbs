@@ -1,0 +1,24 @@
+<form class="sss-coin-scenes-config" autocomplete="off" onsubmit="event.preventDefault();">
+  <p class="sss-coin-scenes-hint">
+    Selecciona las escenas donde los jugadores pueden cambiar monedas de menor a
+    mayor denominación. El DJ conserva acceso en cualquier escena.
+  </p>
+
+  {{#if hasScenes}}
+    <div class="sss-coin-scenes-list">
+      {{#each scenes}}
+        <label class="sss-coin-scene-row">
+          <input type="checkbox" name="sceneIds" value="{{id}}" {{checked selected}}>
+          <i class="fas fa-map" aria-hidden="true"></i>
+          <span>{{name}}</span>
+        </label>
+      {{/each}}
+    </div>
+  {{else}}
+    <p class="sss-coin-scenes-empty">El mundo todavía no contiene escenas.</p>
+  {{/if}}
+
+  <footer class="sss-coin-scenes-footer">
+    <button type="submit"><i class="fas fa-floppy-disk"></i> Guardar escenas</button>
+  </footer>
+</form>

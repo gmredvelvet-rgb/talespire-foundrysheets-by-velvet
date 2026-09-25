@@ -1,0 +1,534 @@
+/* ==========================================================================
+   Hoja Stoneshard 5e By Fatmorbus — v1.0.0
+   Texturas reales del juego (assets/), fuentes píxel y paleta original.
+   ========================================================================== */
+
+/* ---------- Fuentes ---------- */
+
+@font-face {
+  font-family: "SSAlagard";
+  src: url("../fonts/Alagard.ttf") format("truetype");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SSPixelOp";
+  src: url("../fonts/PixelOperator.ttf") format("truetype");
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SSPixelOp";
+  src: url("../fonts/PixelOperator-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SSPixelOp8";
+  src: url("../fonts/PixelOperator8.ttf") format("truetype");
+  font-display: swap;
+}
+
+/* ---------- Ventana ---------- */
+
+.sss-window {
+  --sss-black: #0c0906;
+  --sss-stone: #1b1a22;
+  --sss-stone-hi: #2a2833;
+  --sss-ink: #e6d9ae;
+  --sss-ink-dim: #a3906a;
+  --sss-ink-faint: #7c6c4e;
+  --sss-gold: #e0b054;
+  --sss-gold-dim: #95753c;
+  --sss-red: #8e2f2a;
+  --sss-parch: #b9ad8b;
+  --sss-parch-dark: #2a2118;
+
+  border: 22px solid transparent;
+  border-image: url("../assets/ui/frame9.png") 22 fill repeat;
+  border-radius: 0;
+  background: none;
+  box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.55);
+  image-rendering: pixelated;
+  -webkit-font-smoothing: none;
+  font-smooth: never;
+}
+
+.sss-window .window-header {
+  background: rgba(6, 5, 8, 0.72);
+  border-bottom: 2px solid var(--sss-black);
+  color: var(--sss-ink-dim);
+  font-family: "SSAlagard", Georgia, serif;
+  font-size: 16px;
+  letter-spacing: 0;
+}
+
+.sss-window .window-header a { color: var(--sss-ink-dim); }
+.sss-window .window-header a:hover { color: var(--sss-gold); text-shadow: none; }
+.sss-window .window-header .sss-open-full { color: var(--sss-gold); }
+
+.sss-window .window-content {
+  padding: 0;
+  background: url("../assets/ui/stone_tile.png") repeat;
+  background-size: 128px 128px;
+  color: var(--sss-ink);
+  overflow: hidden;
+}
+
+.sss-root {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 0;
+  font-family: "SSPixelOp", Verdana, sans-serif;
+  font-size: 16px;
+}
+
+.sss-root img { image-rendering: pixelated; }
+
+/* ---------- Cabecera ---------- */
+
+.sss-head {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex: 0 0 auto;
+  padding: 10px 12px 8px;
+  background: rgba(6, 5, 8, 0.45);
+  border-bottom: 2px solid var(--sss-black);
+  box-shadow: 0 2px 0 rgba(90, 69, 39, 0.35);
+}
+
+.sss-portrait {
+  position: relative;
+  flex: 0 0 auto;
+  width: 82px;
+  height: 108px;
+}
+
+.sss-portrait-img {
+  position: absolute;
+  inset: 6px;
+  width: calc(100% - 12px);
+  height: calc(100% - 12px);
+  object-fit: cover;
+  border: 0;
+  background: #000;
+}
+
+.sss-portrait-frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  pointer-events: none;
+}
+
+.sss-id { flex: 1; min-width: 0; }
+
+.sss-name {
+  margin: 0 0 6px;
+  border: 0;
+  color: var(--sss-ink);
+  font-family: "SSAlagard", Georgia, serif;
+  font-size: 26px;
+  font-weight: 400;
+  line-height: 1;
+  text-shadow: 2px 2px 0 #000;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sss-hpbar {
+  position: relative;
+  height: 20px;
+  background: #14070a;
+  border: 2px solid var(--sss-black);
+  box-shadow: inset 1px 1px 0 rgba(0, 0, 0, 0.6);
+  margin-bottom: 6px;
+}
+
+.sss-hpbar-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  background: linear-gradient(180deg, #a03a30, #6c1f1c);
+  border-right: 1px solid rgba(0, 0, 0, 0.5);
+  transition: width 0.3s ease;
+}
+
+.sss-hpbar-text {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  height: 100%;
+  color: #f4e4d0;
+  font-family: "SSPixelOp", Verdana, sans-serif;
+  font-size: 14px;
+  text-shadow: 1px 1px 0 #000;
+}
+
+.sss-hpbar-text input {
+  width: 44px;
+  height: 16px;
+  padding: 0;
+  color: #f4e4d0;
+  background: transparent;
+  border: 0;
+  text-align: right;
+  font-family: inherit;
+  font-size: 14px;
+  text-shadow: 1px 1px 0 #000;
+}
+
+.sss-hpbar-text input:focus { box-shadow: none; outline: 1px dotted var(--sss-gold); }
+
+.sss-stats { display: flex; gap: 14px; align-items: baseline; }
+
+.sss-stat {
+  color: var(--sss-ink-dim);
+  font-size: 16px;
+}
+
+.sss-stat i { color: var(--sss-ink-faint); font-size: 12px; }
+
+.sss-gold { margin-left: auto; color: var(--sss-gold); font-family: "SSAlagard", Georgia, serif; font-size: 18px; }
+.sss-gold i { color: var(--sss-gold); }
+
+/* ---------- Paperdoll ---------- */
+
+.sss-doll {
+  display: grid;
+  grid-template-columns: 64px 1fr 64px;
+  gap: 8px;
+  flex: 0 0 auto;
+  margin: 10px 12px 0;
+  padding: 10px;
+  /* pergamino: base plana + moteado sutil, estilo papel Stoneshard */
+  background:
+    radial-gradient(120% 90% at 50% 8%, rgba(255, 246, 214, 0.16), transparent 60%),
+    repeating-linear-gradient(0deg, rgba(92, 78, 48, 0.07) 0 2px, transparent 2px 5px),
+    repeating-linear-gradient(90deg, rgba(92, 78, 48, 0.05) 0 3px, transparent 3px 7px),
+    linear-gradient(180deg, #b6aa87, #a89c79);
+  border: 2px solid var(--sss-black);
+  box-shadow:
+    inset 0 0 0 2px #8d8264,
+    inset 3px 3px 0 rgba(58, 46, 26, 0.35),
+    inset -3px -3px 0 rgba(255, 246, 214, 0.25);
+}
+
+.sss-doll .sss-slot-label {
+  color: #d6cba8;
+}
+
+.sss-doll-col {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sss-doll-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+  min-height: 240px;
+}
+
+.sss-figure {
+  flex: 1;
+  display: grid;
+  place-items: center;
+  width: 100%;
+}
+
+.sss-figure img {
+  max-width: 140px;
+  max-height: 190px;
+  border: 0;
+  filter: contrast(1.05) saturate(0.9);
+  -webkit-mask-image: linear-gradient(180deg, #000 82%, transparent 100%);
+  mask-image: linear-gradient(180deg, #000 82%, transparent 100%);
+}
+
+/* Slot 56×56 con la celda original */
+.sss-slot {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  background: url("../assets/ui/cell.png") no-repeat center / 52px 52px, rgba(8, 6, 10, 0.75);
+  border: 2px solid var(--sss-black);
+  box-shadow: inset 1px 1px 0 rgba(0, 0, 0, 0.6);
+  cursor: pointer;
+}
+
+.sss-slot:hover,
+.sss-slot.sss-over {
+  background-image: url("../assets/ui/cell_hover.png");
+  border-color: var(--sss-gold-dim);
+}
+
+.sss-slot > i {
+  color: rgba(230, 217, 174, 0.28);
+  font-size: 18px;
+}
+
+.sss-slot-label {
+  position: absolute;
+  left: 50%;
+  bottom: -3px;
+  transform: translateX(-50%);
+  padding: 0 3px;
+  color: var(--sss-ink-faint);
+  background: rgba(10, 8, 6, 0.85);
+  font-family: "SSPixelOp8", monospace;
+  font-size: 8px;
+  letter-spacing: 0;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.sss-slot .sss-item,
+.sss-wslot .sss-item {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  cursor: grab;
+}
+
+.sss-slot .sss-item img { width: 44px; height: 44px; object-fit: contain; border: 0; }
+
+/* ---------- Fila de armas ---------- */
+
+.sss-weapons {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  flex: 0 0 auto;
+  margin: 8px 12px;
+}
+
+.sss-wslot {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 60px;
+  padding: 4px 8px;
+  background: rgba(8, 6, 10, 0.75);
+  border: 2px solid var(--sss-black);
+  box-shadow:
+    inset 2px 2px 0 rgba(0, 0, 0, 0.55),
+    inset -2px -2px 0 rgba(90, 69, 39, 0.35);
+  cursor: pointer;
+}
+
+.sss-wslot:hover,
+.sss-wslot.sss-over { border-color: var(--sss-gold-dim); }
+
+.sss-wslot > i { color: rgba(230, 217, 174, 0.25); font-size: 18px; margin-left: 6px; }
+
+.sss-wslot .sss-item {
+  flex: 0 0 auto;
+  background: url("../assets/ui/cell.png") no-repeat center / 52px 52px;
+}
+
+.sss-wslot .sss-item img { width: 44px; height: 44px; object-fit: contain; border: 0; }
+
+.sss-wslot-name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  color: var(--sss-ink);
+  font-size: 14px;
+  line-height: 1.15;
+}
+
+.sss-wslot-label {
+  color: var(--sss-ink-faint);
+  font-family: "SSPixelOp8", monospace;
+  font-size: 8px;
+  letter-spacing: 1px;
+}
+
+/* ---------- Grilla ---------- */
+
+.sss-grid-wrap {
+  flex: 1;
+  min-height: 120px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  justify-content: center;
+  margin: 0 12px 8px;
+  padding: 6px;
+  background: rgba(5, 4, 7, 0.55);
+  border: 2px solid var(--sss-black);
+  box-shadow: inset 2px 2px 0 rgba(0, 0, 0, 0.5);
+  scrollbar-width: thin;
+  scrollbar-color: #3a3646 #14121a;
+}
+
+.sss-grid {
+  position: relative;
+  flex: 0 0 auto;
+  background-image:
+    repeating-linear-gradient(0deg, rgba(151, 160, 182, 0.16) 0 1px, transparent 1px 52px),
+    repeating-linear-gradient(90deg, rgba(151, 160, 182, 0.16) 0 1px, transparent 1px 52px),
+    url("../assets/ui/cell.png");
+  background-size: 52px 52px, 52px 52px, 52px 52px;
+  background-repeat: repeat;
+  outline: 1px solid rgba(151, 160, 182, 0.16);
+  outline-offset: 0;
+}
+
+.sss-tile {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  cursor: grab;
+}
+
+.sss-tile:hover {
+  background-image: url("../assets/ui/cell_hover.png");
+  background-size: 52px 52px;
+  outline: 1px solid var(--sss-gold-dim);
+  outline-offset: -1px;
+}
+
+.sss-tile img {
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+  border: 0;
+  filter: drop-shadow(1px 1px 0 rgba(0, 0, 0, 0.8));
+}
+
+.sss-tile:active { cursor: grabbing; }
+
+.sss-qty {
+  position: absolute;
+  right: 2px;
+  bottom: 1px;
+  padding: 0 2px;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.7);
+  font-family: "SSPixelOp8", monospace;
+  font-size: 8px;
+  pointer-events: none;
+}
+
+/* ---------- Pie: peso ---------- */
+
+.sss-foot {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 0 0 auto;
+  padding: 6px 12px 8px;
+  background: rgba(6, 5, 8, 0.6);
+  border-top: 2px solid var(--sss-black);
+}
+
+.sss-foot-label {
+  color: var(--sss-ink-faint);
+  font-family: "SSPixelOp8", monospace;
+  font-size: 8px;
+  letter-spacing: 1px;
+}
+
+.sss-encbar {
+  position: relative;
+  flex: 1;
+  height: 10px;
+  background: #0e0c12;
+  border: 1px solid var(--sss-black);
+}
+
+.sss-encbar-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  background: linear-gradient(180deg, #8a8672, #565341);
+}
+
+.sss-encbar::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(90deg, rgba(0, 0, 0, 0.45) 0 1px, transparent 1px 7px);
+  pointer-events: none;
+}
+
+.sss-foot-num {
+  color: var(--sss-ink-dim);
+  font-size: 14px;
+}
+
+/* ---------- Tooltip pergamino ---------- */
+
+.sss-tooltip {
+  position: fixed;
+  z-index: 10000;
+  max-width: 260px;
+  padding: 8px 10px;
+  color: var(--sss-parch-dark, #2a2118);
+  background: #b9ad8b;
+  border: 2px solid #0c0906;
+  box-shadow:
+    inset 1px 1px 0 #d6cba8,
+    inset -1px -1px 0 #8d8264,
+    3px 3px 0 rgba(0, 0, 0, 0.45);
+  font-family: "SSPixelOp", Verdana, sans-serif;
+  font-size: 14px;
+  line-height: 1.35;
+  pointer-events: none;
+  image-rendering: pixelated;
+}
+
+.sss-tooltip header {
+  margin-bottom: 3px;
+  color: #1d1610;
+  font-family: "SSAlagard", Georgia, serif;
+  font-size: 17px;
+  line-height: 1.1;
+}
+
+.sss-tooltip p { margin: 2px 0; }
+
+.sss-tt-type {
+  color: #6b5f45;
+  font-family: "SSPixelOp8", monospace;
+  font-size: 8px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.sss-tt-dmg {
+  font-weight: 700;
+  text-shadow: 0 0 4px rgba(0, 0, 0, 0.25);
+}
+
+.sss-tt-meta { color: #55492f; font-size: 13px; }
+
+/* ---------- Scrollbar ---------- */
+
+.sss-window ::-webkit-scrollbar { width: 12px; }
+.sss-window ::-webkit-scrollbar-track { background: #14121a; border-left: 2px solid var(--sss-black); }
+.sss-window ::-webkit-scrollbar-thumb {
+  background: #3a3646;
+  border: 2px solid var(--sss-black);
+  box-shadow: inset 1px 1px 0 rgba(255, 255, 255, 0.12);
+}

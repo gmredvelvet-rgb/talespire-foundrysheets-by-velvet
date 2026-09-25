@@ -1,0 +1,1871 @@
+/* ==========================================================================
+   Hoja 5e By Fatmorbus — tema dorado
+   Distribución en tres columnas (raíl · retrato · panel) sobre negro y oro,
+   siguiendo el diseño de referencia. El inventario en celdas de Stoneshard
+   conserva sus propios estilos en stoneshard-sheet.css.
+   ========================================================================== */
+
+/*
+ * Marco de la ventana: el CSS original la enmarcaba con `frame9.png` (22 px de
+ * borde pixelado) y desactivaba el suavizado de fuentes. Aquí se sustituye por
+ * un filete fino dorado, y el texto vuelve a suavizarse.
+ */
+.sss-window {
+  border: 1px solid #6b5a33 !important;
+  border-image: none !important;
+  border-radius: 4px;
+  box-shadow: 0 10px 34px #000c;
+  image-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  font-smooth: always;
+}
+
+.sss-window .window-header {
+  border-bottom: 1px solid #3a3020;
+  background: linear-gradient(180deg, #17130d, #0d0b08);
+  color: #c9b98d;
+  font-family: Georgia, "Times New Roman", serif;
+  font-variant: small-caps;
+  letter-spacing: 1.5px;
+}
+
+.sss-window {
+  --sss-bg:        #0c0a08;
+  --sss-bg-2:      #131009;
+  --sss-panel:     #17130d;
+  --sss-panel-2:   #1e1811;
+  --sss-line:      #6b5a33;
+  --sss-line-soft: #3a3020;
+  --sss-gold:      #e2c489;
+  --sss-gold-hi:   #f4e2b4;
+  --sss-gold-dim:  #9c8757;
+  --sss-ink:       #d8c9a6;
+  --sss-ink-dim:   #8d7f63;
+  --sss-red:       #a83228;
+  --sss-red-dim:   #5e1c16;
+  --sss-green:     #6f9d55;
+}
+
+/* ---------- Ventana ---------- */
+
+/*
+ * El CSS del inventario aplica `image-rendering: pixelated` a TODAS las
+ * imágenes de la hoja (viene del look pixel-art original). Aquí se acota: las
+ * celdas del inventario siguen nítidas al estilo Stoneshard, pero el retrato,
+ * los iconos de las listas y la biografía se ven suavizados, que es lo que pide
+ * el diseño dorado.
+ */
+.sss-window .sss-stage-img,
+.sss-window .sss-row-img,
+.sss-window .sss-bio img {
+  image-rendering: auto;
+}
+
+.sss-window .window-content {
+  padding: 0;
+  background: var(--sss-bg);
+  overflow: hidden;
+}
+
+.sss-window .sss-root {
+  display: grid;
+  grid-template-columns: 216px minmax(280px, 1fr) minmax(360px, 1.15fr);
+  gap: 0;
+  height: 100%;
+  min-height: 0;
+  background:
+    radial-gradient(120% 90% at 50% 0%, #1a150e 0%, transparent 60%),
+    var(--sss-bg);
+  color: var(--sss-ink);
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+/* Barras de desplazamiento discretas */
+.sss-window .sss-panel::-webkit-scrollbar,
+.sss-window .sss-grid-wrap::-webkit-scrollbar { width: 9px; }
+.sss-window .sss-panel::-webkit-scrollbar-thumb,
+.sss-window .sss-grid-wrap::-webkit-scrollbar-thumb {
+  background: var(--sss-line-soft);
+  border-radius: 5px;
+}
+
+/* ══════════════ COLUMNA IZQUIERDA ══════════════ */
+
+.sss-window .sss-rail {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  padding: 14px 10px 10px;
+  border-right: 1px solid var(--sss-line-soft);
+  background: linear-gradient(180deg, #14110c, #0b0907);
+}
+
+/* Rombo con el nivel */
+.sss-window .sss-badge {
+  position: relative;
+  align-self: center;
+  width: 54px;
+  height: 54px;
+  margin-bottom: 10px;
+  transform: rotate(45deg);
+  border: 2px solid var(--sss-line);
+  background: linear-gradient(145deg, #241d12, #0e0b07);
+  box-shadow: 0 0 14px #000 inset, 0 0 10px #e2c48922;
+}
+.sss-window .sss-badge-num {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  transform: rotate(-45deg);
+  color: var(--sss-gold-hi);
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.sss-window .sss-rail-id { text-align: center; margin-bottom: 14px; }
+.sss-window .sss-rail-name {
+  margin: 0;
+  border: 0;
+  color: var(--sss-gold);
+  font-size: 15px;
+  font-variant: small-caps;
+  letter-spacing: 2px;
+  line-height: 1.2;
+}
+.sss-window .sss-rail-sub {
+  margin: 1px 0 0;
+  color: var(--sss-ink-dim);
+  font-size: 11px;
+  font-style: italic;
+}
+
+/* Navegación */
+.sss-window .sss-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+}
+.sss-window .sss-nav-item {
+  all: unset;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  border-left: 3px solid transparent;
+  color: var(--sss-ink-dim);
+  font-size: 12px;
+  font-variant: small-caps;
+  letter-spacing: 1.6px;
+  cursor: pointer;
+  transition: color 120ms ease, background 120ms ease, border-color 120ms ease;
+}
+.sss-window .sss-nav-item > i { width: 16px; text-align: center; font-size: 13px; }
+.sss-window .sss-nav-item:hover { color: var(--sss-gold); background: #ffffff08; }
+.sss-window .sss-nav-item.is-active {
+  color: var(--sss-gold-hi);
+  border-left-color: var(--sss-gold);
+  background: linear-gradient(90deg, #2a2116, transparent);
+}
+.sss-window .sss-nav-badge {
+  margin-left: auto;
+  padding: 0 6px;
+  border-radius: 8px;
+  background: #2a2116;
+  color: var(--sss-gold-dim);
+  font-size: 10px;
+}
+
+/* Botones inferiores del raíl */
+.sss-window .sss-rail-actions {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  padding-top: 10px;
+  border-top: 1px solid var(--sss-line-soft);
+}
+.sss-window .sss-rail-actions button {
+  all: unset;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--sss-line-soft);
+  border-radius: 3px;
+  background: #14110b;
+  color: var(--sss-gold-dim);
+  cursor: pointer;
+  transition: color 120ms ease, border-color 120ms ease;
+}
+.sss-window .sss-rail-actions button:hover {
+  color: var(--sss-gold-hi);
+  border-color: var(--sss-line);
+}
+
+/* ══════════════ COLUMNA CENTRAL ══════════════ */
+
+.sss-window .sss-stage {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  border-right: 1px solid var(--sss-line-soft);
+  background: linear-gradient(180deg, #0f0c08, #070605);
+}
+
+.sss-window .sss-stage-tools {
+  position: absolute;
+  top: 8px;
+  left: 0;
+  right: 0;
+  z-index: 3;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 10px;
+  pointer-events: none;
+}
+.sss-window .sss-stage-btn {
+  all: unset;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--sss-line-soft);
+  border-radius: 3px;
+  background: #14110bd9;
+  color: var(--sss-gold-dim);
+  cursor: pointer;
+  pointer-events: auto;
+}
+.sss-window .sss-stage-btn:hover,
+.sss-window .sss-stage-btn.is-on { color: var(--sss-gold-hi); border-color: var(--sss-line); }
+
+.sss-window .sss-stage-art {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
+}
+.sss-window .sss-stage-img {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  object-fit: cover;
+  object-position: top center;
+  /* Se difumina hacia el pie para que el nombre respire, como en el diseño. */
+  -webkit-mask-image: linear-gradient(180deg, #000 78%, transparent 100%);
+  mask-image: linear-gradient(180deg, #000 78%, transparent 100%);
+}
+
+/* Paperdoll superpuesto al retrato */
+.sss-window .sss-doll-overlay {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  grid-template-rows: 1fr auto;
+  gap: 6px;
+  padding: 44px 8px 8px;
+  background: #06050488;
+  pointer-events: none;
+}
+.sss-window .sss-doll-col {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  pointer-events: auto;
+}
+.sss-window .sss-doll-col-right { grid-column: 3; grid-row: 1; }
+.sss-window .sss-doll-bottom {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;
+  pointer-events: auto;
+}
+
+.sss-window .sss-stage-foot {
+  padding: 6px 10px 12px;
+  text-align: center;
+}
+.sss-window .sss-stage-orn { color: var(--sss-gold-dim); font-size: 10px; letter-spacing: 2px; }
+.sss-window .sss-stage-name {
+  margin: 2px 0 0;
+  border: 0;
+  color: var(--sss-gold-hi);
+  font-size: 20px;
+  font-variant: small-caps;
+  letter-spacing: 3px;
+}
+.sss-window .sss-stage-sub {
+  margin: 2px 0 0;
+  color: var(--sss-ink-dim);
+  font-size: 11px;
+  font-variant: small-caps;
+  letter-spacing: 1.4px;
+}
+
+/* ══════════════ COLUMNA DERECHA ══════════════ */
+
+.sss-window .sss-panel {
+  min-height: 0;
+  padding: 12px 14px 18px;
+  overflow-y: auto;
+  background: var(--sss-bg-2);
+}
+
+.sss-window .sss-tab { display: none; }
+.sss-window .sss-tab.is-active { display: block; }
+
+.sss-window .sss-panel-title {
+  margin: 0 0 12px;
+  padding-bottom: 8px;
+  border: 0;
+  border-bottom: 1px solid var(--sss-line-soft);
+  color: var(--sss-gold-hi);
+  font-size: 17px;
+  font-variant: small-caps;
+  letter-spacing: 4px;
+  text-align: center;
+}
+
+/* Fichas de estadística */
+.sss-window .sss-tiles {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+  margin-bottom: 10px;
+}
+.sss-window .sss-tiles-3 { grid-template-columns: repeat(3, 1fr); }
+.sss-window .sss-tile-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  padding: 8px 4px;
+  border: 1px solid var(--sss-line-soft);
+  border-radius: 3px;
+  background: var(--sss-panel);
+}
+.sss-window .sss-tile-stat b { color: var(--sss-gold-hi); font-size: 19px; }
+.sss-window .sss-tile-stat span {
+  color: var(--sss-ink-dim);
+  font-size: 9px;
+  font-variant: small-caps;
+  letter-spacing: 1.4px;
+}
+.sss-window .sss-tile-stat[data-action] { cursor: pointer; }
+.sss-window .sss-tile-stat[data-action]:hover { border-color: var(--sss-line); }
+
+/* Características */
+.sss-window .sss-abils {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 5px;
+  margin-bottom: 12px;
+}
+.sss-window .sss-abil {
+  all: unset;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  padding: 7px 2px;
+  border: 1px solid var(--sss-line-soft);
+  border-radius: 3px;
+  background: var(--sss-panel);
+  cursor: pointer;
+  transition: border-color 120ms ease, background 120ms ease;
+}
+.sss-window .sss-abil:hover { border-color: var(--sss-gold); background: var(--sss-panel-2); }
+.sss-window .sss-abil-key {
+  color: var(--sss-gold-dim);
+  font-size: 9px;
+  font-variant: small-caps;
+  letter-spacing: 1.2px;
+}
+.sss-window .sss-abil-val { color: var(--sss-ink); font-size: 17px; }
+.sss-window .sss-abil-mod { color: var(--sss-gold-hi); font-size: 12px; }
+
+/* Puntos de golpe */
+.sss-window .sss-hp { display: flex; gap: 8px; align-items: stretch; margin-bottom: 8px; }
+.sss-window .sss-hp-track {
+  position: relative;
+  flex: 1 1 auto;
+  height: 30px;
+  border: 1px solid var(--sss-line-soft);
+  border-radius: 3px;
+  background: #1a0d0b;
+  overflow: hidden;
+}
+.sss-window .sss-hp-fill {
+  height: 100%;
+  background: linear-gradient(180deg, var(--sss-red), var(--sss-red-dim));
+  transition: width 200ms ease;
+}
+.sss-window .sss-hp-text {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  color: var(--sss-gold-hi);
+  font-size: 13px;
+  text-shadow: 0 1px 2px #000;
+}
+.sss-window .sss-hp-text b { font-size: 10px; font-variant: small-caps; letter-spacing: 1.5px; }
+.sss-window .sss-hp-text input {
+  width: 46px;
+  height: 20px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--sss-gold-hi);
+  font-family: inherit;
+  font-size: 14px;
+  text-align: right;
+}
+.sss-window .sss-hp-temp {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  min-width: 74px;
+  padding: 2px 6px;
+  border: 1px solid var(--sss-line-soft);
+  border-radius: 3px;
+  background: var(--sss-panel);
+}
+.sss-window .sss-hp-temp span {
+  color: var(--sss-ink-dim);
+  font-size: 9px;
+  font-variant: small-caps;
+  letter-spacing: 1px;
+}
+.sss-window .sss-hp-temp input {
+  width: 100%;
+  height: 16px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--sss-ink);
+  font-family: inherit;
+  text-align: center;
+}
+
+/* Experiencia */
+.sss-window .sss-xp {
+  position: relative;
+  height: 16px;
+  margin-bottom: 12px;
+  border: 1px solid var(--sss-line-soft);
+  border-radius: 3px;
+  background: #11100c;
+  overflow: hidden;
+}
+.sss-window .sss-xp-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #8a7136, var(--sss-gold));
+}
+.sss-window .sss-xp-text {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: #1a1409;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+/* Bloques */
+.sss-window .sss-block { margin-bottom: 12px; }
+.sss-window .sss-block.is-hidden { display: none; }
+.sss-window .sss-block-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 5px;
+  padding-bottom: 4px;
+  border: 0;
+  border-bottom: 1px solid var(--sss-line-soft);
+  color: var(--sss-gold);
+  font-size: 11px;
+  font-variant: small-caps;
+  letter-spacing: 2.4px;
+}
+.sss-window .sss-block-title .sss-slots {
+  margin-left: auto;
+  color: var(--sss-ink-dim);
+  font-size: 11px;
+  letter-spacing: 0;
+}
+
+/* Listas */
+.sss-window .sss-list { margin: 0; padding: 0; list-style: none; }
+.sss-window .sss-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 6px;
+  border-bottom: 1px solid #ffffff08;
+  color: var(--sss-ink);
+  font-size: 12px;
+}
+.sss-window .sss-row.is-hidden { display: none; }
+.sss-window .sss-row[data-action] { cursor: pointer; }
+.sss-window .sss-row[data-action]:hover,
+.sss-window .sss-row-item:hover { background: #ffffff08; }
+.sss-window .sss-row.is-off { opacity: 0.45; }
+.sss-window .sss-row > i { font-size: 8px; color: var(--sss-gold); }
+.sss-window .sss-row > i.sss-dim { color: var(--sss-line-soft); }
+.sss-window .sss-row > i.sss-expert { color: var(--sss-gold-hi); text-shadow: 0 0 6px var(--sss-gold); }
+.sss-window .sss-row-img {
+  width: 24px;
+  height: 24px;
+  border: 1px solid var(--sss-line-soft);
+  border-radius: 2px;
+  object-fit: cover;
+}
+.sss-window .sss-row-name { flex: 1 1 auto; }
+.sss-window .sss-row-name em {
+  display: block;
+  color: var(--sss-ink-dim);
+  font-size: 10px;
+  font-style: italic;
+}
+.sss-window .sss-row-tag {
+  min-width: 30px;
+  color: var(--sss-ink-dim);
+  font-size: 9px;
+  font-variant: small-caps;
+  letter-spacing: 1px;
+  text-align: center;
+}
+.sss-window .sss-row-val { min-width: 30px; color: var(--sss-gold-hi); text-align: right; }
+.sss-window .sss-row-passive {
+  min-width: 26px;
+  color: var(--sss-ink-dim);
+  font-size: 10px;
+  text-align: right;
+}
+.sss-window .sss-row-uses {
+  padding: 1px 6px;
+  border: 1px solid var(--sss-line-soft);
+  border-radius: 8px;
+  color: var(--sss-gold-dim);
+  font-size: 10px;
+}
+
+/* Botón pequeño */
+.sss-window .sss-mini-btn {
+  all: unset;
+  padding: 3px 9px;
+  border: 1px solid var(--sss-line-soft);
+  border-radius: 3px;
+  background: var(--sss-panel);
+  color: var(--sss-gold-dim);
+  font-size: 10px;
+  font-variant: small-caps;
+  letter-spacing: 1.2px;
+  cursor: pointer;
+}
+.sss-window .sss-mini-btn:hover { color: var(--sss-gold-hi); border-color: var(--sss-line); }
+
+/* Preparado (conjuros) */
+.sss-window .sss-prep {
+  all: unset;
+  width: 16px;
+  height: 16px;
+  display: grid;
+  place-items: center;
+  color: var(--sss-line-soft);
+  cursor: pointer;
+}
+.sss-window .sss-prep.is-on { color: var(--sss-gold); }
+.sss-window .sss-prep.is-fixed { cursor: default; }
+
+/* Interruptor de efectos */
+.sss-window .sss-toggle {
+  all: unset;
+  position: relative;
+  width: 34px;
+  height: 18px;
+  border: 1px solid var(--sss-line-soft);
+  border-radius: 9px;
+  background: #100e0a;
+  cursor: pointer;
+}
+.sss-window .sss-toggle-knob {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--sss-ink-dim);
+  transition: left 140ms ease, background 140ms ease;
+}
+.sss-window .sss-toggle.is-on { border-color: var(--sss-line); }
+.sss-window .sss-toggle.is-on .sss-toggle-knob { left: 18px; background: var(--sss-gold); }
+
+/* Salvaciones de muerte */
+.sss-window .sss-death { display: flex; flex-direction: column; gap: 5px; }
+.sss-window .sss-death-row { display: flex; align-items: center; gap: 10px; font-size: 11px; }
+.sss-window .sss-death-row > span { min-width: 54px; color: var(--sss-ink-dim); }
+.sss-window .sss-death-boxes { display: flex; gap: 5px; }
+.sss-window .sss-death-box {
+  all: unset;
+  width: 14px;
+  height: 14px;
+  border: 1px solid var(--sss-line);
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+}
+.sss-window .sss-death-box.is-on { background: var(--sss-green); }
+.sss-window .sss-death-boxes.is-fail .sss-death-box.is-on { background: var(--sss-red); }
+.sss-window .sss-death .sss-mini-btn { align-self: flex-start; margin-top: 2px; }
+
+/* Dados de golpe */
+.sss-window .sss-hd {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 10px;
+  border: 1px solid var(--sss-line-soft);
+  border-radius: 3px;
+  background: var(--sss-panel);
+}
+.sss-window .sss-hd-denom { color: var(--sss-gold); font-size: 13px; }
+.sss-window .sss-hd b { margin-left: auto; color: var(--sss-ink); }
+
+/* Buscador */
+.sss-window .sss-search {
+  position: relative;
+  margin-bottom: 10px;
+}
+.sss-window .sss-search > i {
+  position: absolute;
+  top: 50%;
+  left: 9px;
+  transform: translateY(-50%);
+  color: var(--sss-ink-dim);
+  font-size: 11px;
+}
+.sss-window .sss-search input {
+  width: 100%;
+  height: 28px;
+  padding: 0 10px 0 28px;
+  border: 1px solid var(--sss-line-soft);
+  border-radius: 3px;
+  background: var(--sss-panel);
+  color: var(--sss-ink);
+  font-family: inherit;
+  font-size: 12px;
+}
+.sss-window .sss-search input::placeholder { color: #6b6047; font-style: italic; }
+
+/* Monedas */
+.sss-window .sss-coins {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 5px;
+  margin-bottom: 10px;
+}
+.sss-window .sss-coin {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  padding: 5px 2px;
+  border: 1px solid var(--sss-line-soft);
+  border-radius: 3px;
+  background: var(--sss-panel);
+}
+.sss-window .sss-coin-img {
+  width: 18px;
+  height: 18px;
+  border: 0;
+  object-fit: contain;
+  image-rendering: auto;
+  filter: drop-shadow(0 1px 2px #000);
+}
+.sss-window .sss-coin input {
+  width: 100%;
+  height: 18px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--sss-gold-hi);
+  font-family: inherit;
+  font-size: 14px;
+  text-align: center;
+}
+.sss-window .sss-coin span {
+  color: var(--sss-ink-dim);
+  font-size: 9px;
+  font-variant: small-caps;
+  letter-spacing: 1.2px;
+}
+.sss-window .sss-coin-pp span { color: #cdd3d8; }
+.sss-window .sss-coin-gp span { color: var(--sss-gold); }
+.sss-window .sss-coin-ep span { color: #a9b0a2; }
+.sss-window .sss-coin-sp span { color: #b9c0c6; }
+.sss-window .sss-coin-cp span { color: #c2794a; }
+
+/* Peso */
+.sss-window .sss-enc {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid var(--sss-line-soft);
+  font-size: 11px;
+}
+.sss-window .sss-enc > span { color: var(--sss-ink-dim); font-variant: small-caps; letter-spacing: 1.4px; }
+.sss-window .sss-enc-track {
+  flex: 1 1 auto;
+  height: 8px;
+  border: 1px solid var(--sss-line-soft);
+  border-radius: 4px;
+  background: #100e0a;
+  overflow: hidden;
+}
+.sss-window .sss-enc-fill { height: 100%; background: linear-gradient(90deg, #6b5a33, var(--sss-gold)); }
+.sss-window .sss-enc b { color: var(--sss-ink); }
+
+/* Biografía */
+.sss-window .sss-bio-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 10px;
+  font-size: 11px;
+}
+.sss-window .sss-bio-meta b {
+  margin-right: 4px;
+  color: var(--sss-gold-dim);
+  font-variant: small-caps;
+  letter-spacing: 1px;
+}
+.sss-window .sss-bio {
+  padding: 10px;
+  border: 1px solid var(--sss-line-soft);
+  border-radius: 3px;
+  background: var(--sss-panel);
+  font-size: 12px;
+  line-height: 1.5;
+}
+.sss-window .sss-bio img { max-width: 100%; }
+
+/* Vacíos */
+.sss-window .sss-empty {
+  padding: 18px 10px;
+  color: var(--sss-ink-dim);
+  font-style: italic;
+  text-align: center;
+}
+
+/* La grilla del inventario se centra dentro del panel */
+.sss-window .sss-tab[data-sss-tabpanel="inventory"] .sss-grid-wrap {
+  display: flex;
+  justify-content: center;
+}
+
+/* ==========================================================================
+   Celdas del inventario sin pixel-art
+   Las texturas originales (cell.png, stone_tile.png, frame9.png) dibujaban un
+   borde pixelado que desentona con el tema dorado. Se sustituyen por celdas
+   limpias hechas con degradados y una rejilla dibujada por CSS.
+   ========================================================================== */
+
+.sss-window .sss-grid-wrap {
+  padding: 8px;
+  border: 1px solid var(--sss-line-soft);
+  border-radius: 4px;
+  border-image: none;
+  background: #0b0907;
+}
+
+/* Rejilla de fondo: líneas finas cada 52 px, sin textura */
+.sss-window .sss-grid {
+  background-image:
+    linear-gradient(to right, #ffffff0d 1px, transparent 1px),
+    linear-gradient(to bottom, #ffffff0d 1px, transparent 1px);
+  background-size: 52px 52px, 52px 52px;
+  background-position: 0 0;
+  background-color: #100d0a;
+  border: 1px solid var(--sss-line-soft);
+  border-radius: 3px;
+  image-rendering: auto;
+}
+
+/* Celdas ocupadas y ranuras del paperdoll */
+.sss-window .sss-tile,
+.sss-window .sss-slot {
+  background: linear-gradient(160deg, #1d1811, #0d0b08);
+  border: 1px solid var(--sss-line-soft);
+  border-radius: 3px;
+  image-rendering: auto;
+  transition: border-color 120ms ease, box-shadow 120ms ease;
+}
+.sss-window .sss-tile:hover,
+.sss-window .sss-slot:hover,
+.sss-window .sss-slot.sss-over {
+  border-color: var(--sss-gold);
+  box-shadow: 0 0 8px #e2c48944;
+  background-image: linear-gradient(160deg, #2a2116, #14100b);
+}
+
+/* La ranura vacía marca su icono en dorado apagado */
+.sss-window .sss-slot > i { color: var(--sss-gold-dim); }
+.sss-window .sss-slot.sss-filled { border-color: var(--sss-line); }
+
+/* Los iconos de objeto sí se ven nítidos, pero sin pixelar */
+.sss-window .sss-tile img,
+.sss-window .sss-slot img { image-rendering: auto; }
+
+/* Cantidad */
+.sss-window .sss-qty {
+  border-radius: 2px;
+  background: #0a0806cc;
+  color: var(--sss-gold-hi);
+  font-family: Georgia, serif;
+  text-shadow: 0 1px 2px #000;
+}
+
+/* Tooltip de objeto, en la misma línea del tema */
+.sss-window ~ .sss-tooltip,
+.sss-tooltip {
+  border-image: none;
+  border: 1px solid #6b5a33;
+  border-radius: 4px;
+  background: linear-gradient(160deg, #191410f2, #0b0907f2);
+  color: #d8c9a6;
+  font-family: Georgia, "Times New Roman", serif;
+  image-rendering: auto;
+}
+
+/* -------------------------------------------------------------------------- */
+/*  Menú contextual del inventario (clic derecho)                             */
+/* -------------------------------------------------------------------------- */
+
+.sss-ctx {
+  position: fixed;
+  z-index: 10000;
+  min-width: 208px;
+  padding: 5px;
+  border: 1px solid #6b5a33;
+  border-radius: 4px;
+  background: linear-gradient(160deg, #191410fa, #0b0907fa);
+  box-shadow: 0 10px 26px #000000cc, inset 0 0 0 1px #ffffff0a;
+  font-family: Georgia, "Times New Roman", serif;
+  /* El menú vive en <body>, así que no heredaría el tema de la ventana */
+  image-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+}
+
+.sss-ctx hr {
+  margin: 4px 6px;
+  border: 0;
+  border-top: 1px solid #6b5a3355;
+}
+
+.sss-ctx-item {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  margin: 0;
+  padding: 5px 9px;
+  border: 0;
+  border-radius: 3px;
+  background: none;
+  color: #d8c9a6;
+  font-family: inherit;
+  font-size: 13px;
+  line-height: 1.35;
+  text-align: left;
+  cursor: pointer;
+}
+
+.sss-ctx-item > i {
+  width: 15px;
+  color: var(--sss-gold-dim, #a08a54);
+  font-size: 12px;
+  text-align: center;
+}
+
+.sss-ctx-item:hover:not(:disabled) {
+  background: linear-gradient(90deg, #6b5a3344, #6b5a3311);
+  color: var(--sss-gold-hi, #f0dda6);
+}
+
+.sss-ctx-item:hover:not(:disabled) > i { color: var(--sss-gold-hi, #f0dda6); }
+
+.sss-ctx-item:disabled {
+  color: #6f6553;
+  cursor: default;
+  opacity: .65;
+}
+
+.sss-ctx-item.is-danger:hover:not(:disabled) {
+  background: linear-gradient(90deg, #7a262644, #7a262611);
+  color: #e8a3a3;
+}
+
+.sss-ctx-item.is-danger:hover:not(:disabled) > i { color: #e8a3a3; }
+
+/* Diálogo de «Dar a un personaje» */
+.sss-give select,
+.sss-give input { width: 100%; }
+
+/* La mano secundaria ocupada por un arma a dos manos: presente pero apagada */
+.sss-window .sss-slot.sss-twohand { opacity: .55; }
+.sss-window .sss-slot.sss-twohand::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    135deg, transparent 0 6px, #6b5a3333 6px 7px
+  );
+  pointer-events: none;
+}
+
+/* ---------- Objetos anclados en la pestaña de Atributos ---------- */
+
+.sss-window .sss-pins {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.sss-window .sss-pin {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 6px;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  background: #ffffff05;
+  cursor: pointer;
+}
+
+.sss-window .sss-pin:hover { border-color: var(--sss-line-soft); background: #ffffff0c; }
+
+/* Lo que está puesto se distingue con un filete dorado a la izquierda */
+.sss-window .sss-pin.is-equipped { border-left: 2px solid var(--sss-gold-dim); }
+
+.sss-window .sss-pin .sss-row-img {
+  width: 26px;
+  height: 26px;
+  border: 1px solid var(--sss-line-soft);
+  border-radius: 3px;
+  object-fit: cover;
+}
+
+.sss-window .sss-pin-name {
+  flex: 1 1 auto;
+  overflow: hidden;
+  color: var(--sss-ink);
+  font-size: 12px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sss-window .sss-pin-uses {
+  color: var(--sss-gold-dim);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ==========================================================================
+   Barra de inventario: filtros y sintonización
+   ========================================================================== */
+
+.sss-window .sss-invbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin: 6px 0 8px;
+  padding: 5px 6px;
+  border-top: 1px solid var(--sss-line-soft);
+  border-bottom: 1px solid var(--sss-line-soft);
+}
+
+.sss-window .sss-filters { display: flex; gap: 3px; }
+
+.sss-window .sss-filter {
+  all: unset;
+  box-sizing: border-box;
+  display: grid;
+  place-items: center;
+  width: 27px;
+  height: 27px;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  color: var(--sss-ink-dim);
+  font-size: 12px;
+  cursor: pointer;
+  transition: color 110ms ease, border-color 110ms ease, background 110ms ease;
+}
+
+.sss-window .sss-filter:hover { color: var(--sss-gold); background: #ffffff0a; }
+
+.sss-window .sss-filter.is-active {
+  color: var(--sss-gold-hi);
+  border-color: var(--sss-line);
+  background: linear-gradient(180deg, #2a2116, #16110b);
+  box-shadow: inset 0 0 8px #e2c48922;
+}
+
+/* Un grupo sin objetos se deja visible pero claramente inerte */
+.sss-window .sss-filter.is-empty { opacity: .3; }
+
+/* Contador de sintonización */
+.sss-window .sss-attune {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 9px;
+  border: 1px solid var(--sss-line-soft);
+  border-radius: 3px;
+  background: #14110b;
+  color: var(--sss-gold-dim);
+  font-size: 12px;
+  cursor: help;
+}
+
+.sss-window .sss-attune > i { color: #e0954a; font-size: 11px; }
+.sss-window .sss-attune > b { color: var(--sss-gold-hi); font-variant-numeric: tabular-nums; }
+
+/* Pasarse del límite de sintonización es un error de reglas: se avisa */
+.sss-window .sss-attune.is-over {
+  border-color: var(--sss-red);
+  background: #2a100e;
+}
+.sss-window .sss-attune.is-over > b { color: #e8a3a3; }
+
+/* ==========================================================================
+   Rareza en las celdas del inventario
+   ========================================================================== */
+
+/*
+ * Los colores salen de Special Item Reveal (misma paleta), y llegan como
+ * variables en línea desde la plantilla. Los objetos comunes no llevan ninguna
+ * clase, así que la grilla no se convierte en un semáforo.
+ */
+.sss-window .sss-tile.sss-rare {
+  border: 1px solid var(--sss-rar);
+  background-image:
+    radial-gradient(circle at 50% 115%, var(--sss-rar-bg), transparent 70%);
+  box-shadow: inset 0 0 9px var(--sss-rar-glow), 0 0 5px var(--sss-rar-glow);
+}
+
+.sss-window .sss-tile.sss-rare:hover {
+  box-shadow: inset 0 0 12px var(--sss-rar-glow), 0 0 11px var(--sss-rar-glow);
+}
+
+/* Marca de sintonizado, en la esquina de la celda */
+.sss-window .sss-attune-mark {
+  position: absolute;
+  top: 2px;
+  left: 3px;
+  color: #e0954a;
+  font-size: 9px;
+  text-shadow: 0 0 4px #000, 0 0 6px #e0954a88;
+  pointer-events: none;
+}
+
+/* Objeto que no pasa el filtro activo */
+.sss-window .sss-tile.is-dimmed {
+  opacity: .18;
+  filter: grayscale(1);
+  pointer-events: none;
+}
+
+/* ==========================================================================
+   Conjuros: reordenar y estado de preparación
+   ========================================================================== */
+
+.sss-window .sss-spell { cursor: grab; }
+.sss-window .sss-spell.is-dragging { opacity: .4; cursor: grabbing; }
+
+/* Línea dorada donde va a caer el conjuro arrastrado */
+.sss-window .sss-spell.is-over {
+  box-shadow: inset 0 2px 0 var(--sss-gold);
+}
+
+/* Un conjuro sin preparar no se puede lanzar hoy: se apaga */
+.sss-window .sss-spell.is-unprepared { opacity: .45; }
+.sss-window .sss-spell.is-unprepared .sss-row-img { filter: grayscale(.8); }
+.sss-window .sss-spell.is-unprepared:hover { opacity: .8; }
+
+/* ==========================================================================
+   Tooltip de objeto
+   ========================================================================== */
+
+/*
+ * El título se leía mal sobre el fondo translúcido. Ahora va en su propia
+ * banda opaca, más grande, y toma el color de la rareza cuando la hay.
+ */
+.sss-tooltip {
+  max-width: 320px;
+  padding: 0 0 8px;
+  background: linear-gradient(160deg, #1c1710fa, #0a0806fa);
+  box-shadow: 0 8px 22px #000c;
+  overflow: hidden;
+}
+
+.sss-tooltip > header {
+  margin: 0 0 6px;
+  padding: 7px 11px;
+  border-bottom: 1px solid var(--sss-rar, #6b5a33);
+  background: linear-gradient(180deg, #000000cc, #00000055);
+  color: var(--sss-rar, #f4e2b4);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 15px;
+  font-variant: small-caps;
+  letter-spacing: .8px;
+  /* Contorno oscuro: legible aunque el color de rareza sea claro */
+  text-shadow: 0 1px 0 #000, 0 0 8px var(--sss-rar-glow, transparent);
+}
+
+.sss-tooltip > p { margin: 0; padding: 1px 11px; }
+
+.sss-tooltip .sss-tt-type {
+  color: #9c8757;
+  font-size: 10px;
+  font-variant: small-caps;
+  letter-spacing: 1.6px;
+}
+
+.sss-tooltip .sss-tt-act {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 3px;
+  color: #cfe0f0;
+  font-size: 11px;
+}
+.sss-tooltip .sss-tt-act > i { color: #7fa8cc; font-size: 9px; }
+
+.sss-tooltip .sss-tt-dmg { margin-top: 3px; font-size: 12px; font-weight: 700; }
+
+.sss-tooltip .sss-tt-meta { margin-top: 3px; color: #8d7f63; font-size: 11px; }
+
+.sss-tooltip .sss-tt-price {
+  margin-top: 2px;
+  color: #c9a85e;
+  font-size: 11px;
+  letter-spacing: .6px;
+}
+.sss-tooltip .sss-tt-price > b { color: #f0dda6; font-variant-numeric: tabular-nums; }
+
+/* La descripción se lee de verdad: claro sobre oscuro y con aire */
+.sss-tooltip .sss-tt-desc {
+  margin-top: 7px;
+  padding-top: 7px;
+  border-top: 1px solid #6b5a3344;
+  color: #e6dcc4;
+  font-size: 11.5px;
+  font-style: italic;
+  line-height: 1.45;
+}
+
+/* ==========================================================================
+   Compactado (v2.3) — el raíl y la cabecera ocupaban demasiado
+   Se ajusta al tamaño de la hoja de referencia: raíl de 180 px, navegación
+   más apretada y cabecera de ventana baja.
+   ========================================================================== */
+
+.sss-window .sss-root {
+  grid-template-columns: 180px minmax(260px, 1fr) minmax(360px, 1.2fr);
+}
+
+.sss-window .sss-rail { padding: 10px 6px 8px; }
+
+/* Rombo del nivel */
+.sss-window .sss-badge { width: 42px; height: 42px; margin-bottom: 7px; }
+.sss-window .sss-badge-num { font-size: 17px; }
+
+.sss-window .sss-rail-id { margin-bottom: 9px; }
+.sss-window .sss-rail-name { font-size: 13px; letter-spacing: 1.4px; }
+.sss-window .sss-rail-sub { font-size: 10px; }
+
+/* Navegación */
+.sss-window .sss-nav { gap: 1px; }
+.sss-window .sss-nav-item {
+  gap: 8px;
+  padding: 7px 9px;
+  font-size: 10.5px;
+  letter-spacing: 1.1px;
+}
+.sss-window .sss-nav-item > i { width: 14px; font-size: 11px; }
+.sss-window .sss-nav-badge { padding: 0 5px; font-size: 9px; }
+
+/* Botones del pie del raíl */
+.sss-window .sss-rail-actions { gap: 4px; padding-top: 7px; }
+.sss-window .sss-rail-actions button { width: 27px; height: 27px; font-size: 11px; }
+
+/* Cabecera de la ventana */
+.sss-window .window-header {
+  padding: 3px 8px;
+  font-size: 11px;
+  letter-spacing: 1.1px;
+}
+.sss-window .window-header .window-title { font-size: 11px; margin: 0; }
+.sss-window .window-header a,
+.sss-window .window-header button { font-size: 11px; }
+
+/* Títulos y bloques del panel derecho, también más apretados */
+.sss-window .sss-panel-title { margin-bottom: 8px; font-size: 14px; }
+.sss-window .sss-block { margin-top: 10px; }
+.sss-window .sss-block-title { font-size: 10.5px; letter-spacing: 1.4px; }
+.sss-window .sss-row { padding: 3px 5px; }
+
+/* ==========================================================================
+   Detalles del personaje (Atributos): sentidos, clases, defensas, competencias
+   ========================================================================== */
+
+.sss-window .sss-taglist {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.sss-window .sss-taglist li {
+  padding: 2px 7px;
+  border: 1px solid var(--sss-line-soft);
+  border-radius: 10px;
+  background: #ffffff06;
+  color: var(--sss-ink);
+  font-size: 10.5px;
+}
+
+/* Fila de clase / especie / trasfondo */
+.sss-window .sss-idrow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+  padding: 4px 6px;
+  border: 1px solid var(--sss-line-soft);
+  border-radius: 3px;
+  background: linear-gradient(90deg, #ffffff08, transparent);
+}
+.sss-window .sss-idrow .sss-row-img {
+  width: 26px;
+  height: 26px;
+  border: 1px solid var(--sss-line-soft);
+  border-radius: 3px;
+  object-fit: cover;
+}
+.sss-window .sss-idrow-main {
+  flex: 1 1 auto;
+  color: var(--sss-gold);
+  font-size: 12px;
+  font-variant: small-caps;
+  letter-spacing: .6px;
+}
+.sss-window .sss-idrow-main em {
+  display: block;
+  color: var(--sss-ink-dim);
+  font-size: 10px;
+  font-variant: normal;
+  letter-spacing: 0;
+}
+
+/* Defensas y competencias */
+.sss-window .sss-profrow {
+  display: grid;
+  grid-template-columns: 108px 1fr;
+  gap: 8px;
+  padding: 3px 4px;
+  border-bottom: 1px solid #3a302033;
+}
+.sss-window .sss-profrow:last-child { border-bottom: 0; }
+.sss-window .sss-prof-label {
+  color: var(--sss-gold-dim);
+  font-size: 10.5px;
+  font-variant: small-caps;
+  letter-spacing: 1px;
+}
+.sss-window .sss-prof-label > i { width: 13px; text-align: center; }
+.sss-window .sss-prof-values {
+  color: var(--sss-ink);
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+/* Botón pequeño junto al título de un panel */
+.sss-window .sss-panel-title { display: flex; align-items: center; gap: 8px; }
+.sss-window .sss-title-btn {
+  all: unset;
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border: 1px solid var(--sss-line-soft);
+  border-radius: 3px;
+  color: #e0954a;
+  font-size: 11px;
+  cursor: pointer;
+}
+.sss-window .sss-title-btn:hover {
+  border-color: var(--sss-line);
+  color: #ffc27a;
+  box-shadow: 0 0 8px #e0954a44;
+}
+
+/* ==========================================================================
+   Conjuros: filtro por nivel y espacios
+   ========================================================================== */
+
+.sss-window .sss-lvlfilters {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 3px;
+  margin: 8px 0;
+}
+.sss-window .sss-lvlfilter {
+  all: unset;
+  box-sizing: border-box;
+  padding: 5px 0;
+  border: 1px solid var(--sss-line-soft);
+  border-radius: 3px;
+  background: #14110b;
+  color: var(--sss-ink-dim);
+  font-size: 10px;
+  font-variant: small-caps;
+  letter-spacing: 1.2px;
+  text-align: center;
+  cursor: pointer;
+  transition: color 110ms ease, border-color 110ms ease, background 110ms ease;
+}
+.sss-window .sss-lvlfilter:hover { color: var(--sss-gold); border-color: var(--sss-line); }
+.sss-window .sss-lvlfilter.is-active {
+  background: linear-gradient(180deg, #c9a85e, #8a6f34);
+  border-color: var(--sss-gold);
+  color: #1a1409;
+  font-weight: 700;
+}
+.sss-window .sss-lvlfilter.is-empty { opacity: .32; }
+
+/* Espacios de conjuro */
+.sss-window .sss-slotgrid { display: flex; flex-direction: column; gap: 3px; }
+.sss-window .sss-slotrow {
+  display: grid;
+  grid-template-columns: 92px 1fr auto;
+  align-items: center;
+  gap: 8px;
+}
+.sss-window .sss-slotrow-label {
+  color: var(--sss-ink-dim);
+  font-size: 11px;
+  font-variant: small-caps;
+  letter-spacing: .8px;
+}
+.sss-window .sss-slotrow-count {
+  color: var(--sss-gold-dim);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+.sss-window .sss-pips { display: flex; flex-wrap: wrap; gap: 3px; }
+.sss-window .sss-pip {
+  all: unset;
+  display: grid;
+  place-items: center;
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  color: #4a4034;
+  font-size: 10px;
+  cursor: pointer;
+  transition: color 110ms ease, text-shadow 110ms ease, transform 110ms ease;
+}
+.sss-window .sss-pip:hover { transform: scale(1.18); }
+/* Espacio disponible: la llama se enciende */
+.sss-window .sss-pip.is-on {
+  color: #e8963c;
+  text-shadow: 0 0 6px #e8963caa, 0 0 12px #e8963c55;
+}
+
+/* ==========================================================================
+   Resumen de combate bajo la barra de peso
+   ========================================================================== */
+
+.sss-window .sss-combat {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--sss-line-soft);
+}
+
+.sss-window .sss-combat-top {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-bottom: 6px;
+}
+
+.sss-window .sss-cstat {
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+  padding: 4px 9px;
+  border: 1px solid var(--sss-line-soft);
+  border-radius: 3px;
+  background: linear-gradient(180deg, #1a1610, #0e0c08);
+  cursor: help;
+}
+.sss-window .sss-cstat > i { color: var(--sss-gold-dim); font-size: 10px; }
+.sss-window .sss-cstat > b {
+  color: var(--sss-gold-hi);
+  font-size: 14px;
+  font-variant-numeric: tabular-nums;
+}
+.sss-window .sss-cstat > span {
+  color: var(--sss-ink-dim);
+  font-size: 9px;
+  font-variant: small-caps;
+  letter-spacing: 1px;
+}
+
+.sss-window .sss-combat-weapons { display: flex; flex-direction: column; gap: 2px; }
+
+.sss-window .sss-cweapon {
+  display: grid;
+  grid-template-columns: 24px 1fr auto auto;
+  align-items: center;
+  gap: 8px;
+  padding: 3px 5px;
+  border-radius: 3px;
+  background: #ffffff05;
+  cursor: pointer;
+}
+.sss-window .sss-cweapon:hover { background: #ffffff0d; }
+.sss-window .sss-cweapon .sss-row-img {
+  width: 24px;
+  height: 24px;
+  border: 1px solid var(--sss-line-soft);
+  border-radius: 3px;
+  object-fit: cover;
+}
+.sss-window .sss-cweapon-name {
+  overflow: hidden;
+  color: var(--sss-ink);
+  font-size: 11.5px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.sss-window .sss-cweapon-atk {
+  color: #9fc3e0;
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+.sss-window .sss-cweapon-dmg {
+  color: #d9a05a;
+  font-size: 11px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.sss-window .sss-combat-empty { margin: 0; font-size: 11px; }
+
+/* Los dos botones de la esquina del retrato van en fila */
+.sss-window .sss-stage-tools-left { display: flex; gap: 6px; pointer-events: none; }
+.sss-window .sss-stage-tools-left > button { pointer-events: auto; }
+
+/* ==========================================================================
+   Brillo de los objetos sintonizados
+   ========================================================================== */
+
+/*
+ * Un aro que late alrededor de la celda. Se dibuja en un pseudo-elemento para
+ * no tocar el borde de rareza, que puede estar puesto a la vez.
+ */
+@keyframes sss-attune-pulse {
+  0%, 100% { opacity: .45; transform: scale(1); }
+  50%      { opacity: .95; transform: scale(1.06); }
+}
+
+.sss-window .sss-tile.is-attuned::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border: 1px solid #e0954a;
+  border-radius: 4px;
+  box-shadow: 0 0 8px #e0954a99, inset 0 0 8px #e0954a55;
+  animation: sss-attune-pulse 2.4s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* Con el movimiento reducido activado, el aro se queda quieto */
+@media (prefers-reduced-motion: reduce) {
+  .sss-window .sss-tile.is-attuned::before { animation: none; opacity: .8; }
+}
+
+/* ==========================================================================
+   Árbol de habilidades (pestaña Rasgos)
+   Una escalera vertical del nivel 1 al 20. Los niveles alcanzados van en
+   dorado; los que faltan quedan apagados, pero se ven, para saber qué viene.
+   ========================================================================== */
+
+.sss-window .sss-tree {
+  display: flex;
+  flex-direction: column;
+  margin-top: 6px;
+}
+
+.sss-window .sss-tier {
+  display: grid;
+  grid-template-columns: 34px 1fr;
+  gap: 10px;
+  align-items: stretch;
+}
+
+/* Carril con la línea y el número del nivel */
+.sss-window .sss-tier-rail {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  padding: 4px 0;
+}
+
+/* La línea que une los peldaños; el último no la lleva hacia abajo */
+.sss-window .sss-tier-rail::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 2px;
+  margin-left: -1px;
+  background: var(--sss-line-soft);
+}
+.sss-window .sss-tier:first-child .sss-tier-rail::before { top: 14px; }
+.sss-window .sss-tier:last-child .sss-tier-rail::before { bottom: calc(100% - 14px); }
+
+.sss-window .sss-tier-node {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border: 2px solid var(--sss-line-soft);
+  border-radius: 50%;
+  background: #0e0b07;
+  color: var(--sss-ink-dim);
+  font-family: Georgia, serif;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+/* Nivel ya alcanzado */
+.sss-window .sss-tier.is-reached .sss-tier-rail::before { background: var(--sss-line); }
+.sss-window .sss-tier.is-reached .sss-tier-node {
+  border-color: var(--sss-gold);
+  background: linear-gradient(160deg, #2c2314, #12100a);
+  color: var(--sss-gold-hi);
+  box-shadow: 0 0 9px #e2c48944;
+}
+
+/* El nivel actual se marca con un halo */
+.sss-window .sss-tier.is-current .sss-tier-node {
+  border-color: var(--sss-gold-hi);
+  box-shadow: 0 0 0 3px #e2c4891f, 0 0 14px #e2c48977;
+}
+
+/* Niveles que aún no se tienen */
+.sss-window .sss-tier.is-locked .sss-tier-rail::before {
+  background: repeating-linear-gradient(
+    180deg, var(--sss-line-soft) 0 4px, transparent 4px 8px
+  );
+}
+
+.sss-window .sss-tier-body {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 4px 0 10px;
+  min-width: 0;
+}
+
+.sss-window .sss-tier-empty {
+  margin: 0;
+  color: #4a4034;
+  font-size: 12px;
+  line-height: 26px;
+}
+
+/* --- Nodos del árbol --- */
+
+.sss-window .sss-node {
+  display: grid;
+  grid-template-columns: 30px 1fr auto auto;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 7px;
+  border: 1px solid var(--sss-line-soft);
+  border-radius: 3px;
+  min-width: 0;
+}
+
+.sss-window .sss-node-img {
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--sss-line-soft);
+  border-radius: 3px;
+  object-fit: cover;
+  image-rendering: auto;
+}
+
+.sss-window .sss-node-name {
+  overflow: hidden;
+  font-size: 12px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sss-window .sss-node-uses {
+  color: var(--sss-gold-dim);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Rasgo que el personaje ya tiene */
+.sss-window .sss-node.is-owned {
+  background: linear-gradient(90deg, #ffffff0d, transparent 70%);
+  color: var(--sss-ink);
+  cursor: grab;
+}
+.sss-window .sss-node.is-owned:hover {
+  border-color: var(--sss-line);
+  background: linear-gradient(90deg, #2a211633, transparent 70%);
+}
+.sss-window .sss-node.is-owned .sss-node-name { color: var(--sss-gold); }
+
+/* Los pasivos se distinguen con un filete a la izquierda */
+.sss-window .sss-node.is-owned.is-passive { border-left: 2px solid var(--sss-line-soft); }
+
+/* Rasgo que todavía no se ha ganado */
+.sss-window .sss-node.is-future {
+  border-style: dashed;
+  border-color: #2e2820;
+  background: transparent;
+  color: #6b6252;
+  cursor: help;
+}
+.sss-window .sss-node.is-future .sss-node-img {
+  filter: grayscale(1) brightness(.55);
+  opacity: .7;
+}
+.sss-window .sss-node.is-future .sss-node-name { color: #6b6252; }
+.sss-window .sss-node.is-future:hover {
+  border-color: #453a28;
+  color: #8d7f63;
+}
+.sss-window .sss-node.is-future:hover .sss-node-img { filter: grayscale(.6) brightness(.75); opacity: .9; }
+
+.sss-window .sss-node-tag {
+  padding: 0 5px;
+  border: 1px solid #3a3020;
+  border-radius: 8px;
+  color: #6b6252;
+  font-size: 9px;
+  font-variant: small-caps;
+  letter-spacing: .8px;
+}
+
+/* ==========================================================================
+   Grilla escalable (v2.5)
+   El inventario se salía del panel: la celda era fija de 52 px y con 9
+   columnas no cabía. Ahora el tamaño de celda es una variable que el script
+   ajusta al ancho disponible, así que la grilla siempre entra entera.
+   ========================================================================== */
+
+.sss-window {
+  /* Valor de partida; `_fitGrid` lo recalcula al abrir y al redimensionar. */
+  --sss-cell: 52px;
+}
+
+.sss-window .sss-grid-wrap {
+  justify-content: flex-start;
+  overflow-x: hidden;
+}
+
+.sss-window .sss-grid {
+  width: calc(var(--sss-cell) * var(--cols));
+  height: calc(var(--sss-cell) * var(--rows));
+  /* La rejilla de fondo sigue el tamaño de celda real */
+  background-size: var(--sss-cell) var(--sss-cell), var(--sss-cell) var(--sss-cell);
+}
+
+/* Las piezas se posicionan y dimensionan en múltiplos de celda */
+.sss-window .sss-grid .sss-tile {
+  left: calc(var(--sss-cell) * var(--x, 0));
+  top: calc(var(--sss-cell) * var(--y, 0));
+  width: calc(var(--sss-cell) * var(--w, 1));
+  height: calc(var(--sss-cell) * var(--h, 1));
+}
+
+.sss-window .sss-grid .sss-tile > img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 2px;
+}
+
+/* Un objeto que ocupa más de un cuadro se marca con una esquina doblada */
+.sss-window .sss-tile:not([data-w="1"]),
+.sss-window .sss-tile:not([data-h="1"]) {
+  border-color: #57492b;
+}
+
+/* Silueta de destino mientras se arrastra sobre la grilla */
+.sss-window .sss-drop-ghost {
+  position: absolute;
+  z-index: 5;
+  border: 1px dashed var(--sss-gold);
+  border-radius: 3px;
+  background: #e2c4891a;
+  pointer-events: none;
+}
+.sss-window .sss-drop-ghost.is-bad {
+  border-color: var(--sss-red);
+  background: #a832281a;
+}
+
+/* Objetivo de apilado: el montón destino se resalta */
+.sss-window .sss-tile.is-stack-target {
+  border-color: #6f9d55;
+  box-shadow: 0 0 10px #6f9d5588, inset 0 0 10px #6f9d5544;
+}
+
+/* ==========================================================================
+   Ranuras del paperdoll más grandes
+   A 56 px no se distinguía qué llevaba puesto el personaje.
+   ========================================================================== */
+
+.sss-window .sss-doll-overlay .sss-slot {
+  width: 72px;
+  height: 72px;
+}
+.sss-window .sss-doll-overlay .sss-slot .sss-item {
+  width: 68px;
+  height: 68px;
+}
+.sss-window .sss-doll-overlay .sss-slot .sss-item > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 2px;
+}
+.sss-window .sss-doll-overlay .sss-slot > i { font-size: 24px; }
+.sss-window .sss-doll-overlay .sss-slot-label { font-size: 8px; letter-spacing: .6px; }
+
+/* Con las ranuras más grandes, las columnas necesitan algo más de aire */
+.sss-window .sss-doll-col { gap: 10px; }
+.sss-window .sss-doll-bottom { gap: 8px; }
+
+/* Dibujo de la ranura vacía (SVG propio, ver assets/slots) */
+.sss-window .sss-slot-art {
+  width: 62%;
+  height: 62%;
+  object-fit: contain;
+  opacity: .38;
+  image-rendering: auto;
+  pointer-events: none;
+  transition: opacity 120ms ease;
+}
+.sss-window .sss-slot:hover .sss-slot-art,
+.sss-window .sss-slot.sss-over .sss-slot-art { opacity: .8; }
+
+/* El botón de conjunto gira mientras trabaja, para que se note al instante */
+@keyframes sss-spin { to { transform: rotate(360deg); } }
+.sss-window .sss-stage-btn.is-working > i { animation: sss-spin .7s linear infinite; }
+.sss-window .sss-stage-btn.is-working { pointer-events: none; opacity: .75; }
+
+/* Diálogo de dividir pila */
+.sss-split-total { margin: 0 0 6px; opacity: .85; }
+
+/* ==========================================================================
+   Cinturón: cuatro cartucheras centradas (v2.6)
+   Van en su propia fila, entre el cuerpo y las armas, para que se lean como
+   lo que son: lo que el personaje lleva a mano.
+   ========================================================================== */
+
+.sss-window .sss-doll-overlay {
+  /* Fila extra: cuerpo · cinturón · armas */
+  grid-template-rows: 1fr auto auto;
+}
+
+.sss-window .sss-doll-belt {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  align-items: flex-end;
+  margin-bottom: 4px;
+  pointer-events: auto;
+}
+
+.sss-window .sss-doll-bottom { grid-row: 3; }
+
+/* Las cartucheras se distinguen del resto: algo más bajas y con filete doble */
+.sss-window .sss-doll-belt .sss-slot {
+  width: 64px;
+  height: 64px;
+  border-color: #57492b;
+  box-shadow: inset 0 0 0 1px #0000006b;
+}
+.sss-window .sss-doll-belt .sss-slot .sss-item {
+  width: 60px;
+  height: 60px;
+}
+.sss-window .sss-doll-belt .sss-slot > .sss-slot-art { width: 54%; height: 54%; }
+
+/* Numerito de la cartuchera, para saber cuál es cuál de un vistazo */
+.sss-window .sss-doll-belt .sss-slot::after {
+  content: attr(data-belt-index);
+  position: absolute;
+  top: 2px;
+  left: 4px;
+  color: var(--sss-gold-dim);
+  font-family: Georgia, serif;
+  font-size: 9px;
+  opacity: .7;
+  pointer-events: none;
+}
+
+.sss-window .sss-doll-belt .sss-slot.sss-filled::after { opacity: .35; }
+
+/* Solo la primera cartuchera rotula «CINTURÓN»; el resto se lee por el número */
+.sss-window .sss-doll-belt .sss-slot:not([data-belt-index="1"]) .sss-slot-label {
+  display: none;
+}
+
+/* Ranura que rechaza lo que se arrastra encima */
+.sss-window .sss-slot.sss-over-bad {
+  border-color: var(--sss-red) !important;
+  box-shadow: 0 0 8px #a8322866 !important;
+  background-image: linear-gradient(160deg, #2a1210, #140b09) !important;
+}

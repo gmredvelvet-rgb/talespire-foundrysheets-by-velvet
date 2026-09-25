@@ -1,0 +1,14 @@
+CRÉDITOS Y AVISO DE USO
+=======================
+
+sounds/  : efectos del videojuego Stoneshard (Ink Stains Games / HypeTrain
+           Digital), extraídos de una copia legalmente adquirida en Steam.
+assets/  : texturas de interfaz del mismo juego (celdas, marcos, paneles).
+
+SOLO PARA USO PRIVADO EN LA MESA DEL PROPIETARIO. NO REDISTRIBUIR este
+módulo con estos recursos incluidos (Nexus, Foundry package list, GitHub
+público, etc.). Para publicarlo habría que sustituir sounds/ y assets/
+por recursos con licencia libre.
+
+fonts/   : Alagard (Hewett Tsoi, gratuita) y Pixel Operator / Pixel
+           Operator 8 (Jayvee Enaguas, CC0). Estas sí son redistribuibles.

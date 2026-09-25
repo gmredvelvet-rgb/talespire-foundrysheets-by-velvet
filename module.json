@@ -1,0 +1,101 @@
+{
+  "id": "talespire-foundrysheets-by-velvet",
+  "title": "Talespire Foundry Sheets by Velvet",
+  "description": "Hoja de personaje estilo Stoneshard para D&D 5e y Pathfinder 2e, optimizada para usarse dentro del Symbiote de TaleSpire. En PF2e hereda de la hoja oficial para conservar acciones, tiradas, inventario, conjuros, crafting, feats, efectos y automatizaciones. Diseño de una columna automático en TaleSpire y pantallas estrechas.",
+  "version": "1.0.0",
+  "authors": [
+    {
+      "name": "GM RedVelvet",
+      "email": "gmredvelvet@gmail.com",
+      "url": "https://github.com/gmredvelvet-rgb",
+      "discord": "gmredvelvet"
+    }
+  ],
+  "compatibility": {
+    "minimum": "13",
+    "verified": "14"
+  },
+  "url": "https://github.com/gmredvelvet-rgb/talespire-foundrysheets-by-velvet",
+  "manifest": "https://github.com/gmredvelvet-rgb/talespire-foundrysheets-by-velvet/releases/latest/download/module.json",
+  "download": "https://github.com/gmredvelvet-rgb/talespire-foundrysheets-by-velvet/releases/latest/download/module.zip",
+  "readme": "https://github.com/gmredvelvet-rgb/talespire-foundrysheets-by-velvet#readme",
+  "bugs": "https://github.com/gmredvelvet-rgb/talespire-foundrysheets-by-velvet/issues",
+  "changelog": "https://github.com/gmredvelvet-rgb/talespire-foundrysheets-by-velvet/blob/main/CHANGELOG.md",
+  "license": "SEE LICENSE IN LICENSE",
+  "relationships": {
+    "systems": [
+      {
+        "id": "dnd5e",
+        "type": "system",
+        "compatibility": {
+          "minimum": "4.0.0",
+          "verified": "5.2.5"
+        }
+      },
+      {
+        "id": "pf2e",
+        "type": "system",
+        "compatibility": {
+          "minimum": "8.5.1",
+          "verified": "8.5.1"
+        }
+      }
+    ],
+    "recommends": [
+      {
+        "id": "tidy5e-sheet",
+        "type": "module",
+        "reason": "Si está activo, el botón de hoja del sistema puede abrir Tidy 5e. Sin Tidy usa la hoja oficial de dnd5e.",
+        "compatibility": {}
+      },
+      {
+        "id": "combat-hub-dnd5e-by-fatmorbus",
+        "type": "module",
+        "reason": "Si está activo, el paperdoll y el Hub comparten equipo: lo que pones en las manos de la hoja queda empuñado en el Hub y al revés. Sin él la hoja funciona igual.",
+        "compatibility": {}
+      },
+      {
+        "id": "special-item-reveal-by-fatmorbus",
+        "type": "module",
+        "reason": "Si está activo, la hoja usa su lectura de rareza para colorear las celdas del inventario y los tooltips con la misma paleta. Sin él la hoja lee la rareza por su cuenta.",
+        "compatibility": {}
+      }
+    ],
+    "requires": [
+      {
+        "id": "velvet-license-hub",
+        "type": "module",
+        "manifest": "https://github.com/gmredvelvet-rgb/velvet-license-hub/releases/latest/download/module.json",
+        "compatibility": {
+          "minimum": "2.0.0"
+        }
+      }
+    ]
+  },
+  "esmodules": [
+    "scripts/stoneshard-sheet.js",
+    "scripts/pf2e-sheet.js",
+    "scripts/native-sheet-detach.js",
+    "scripts/legacy-migration.js",
+    "scripts/license/boot.js"
+  ],
+  "styles": [
+    "styles/stoneshard-sheet.css",
+    "styles/sheet-theme.css",
+    "styles/enhancements.css",
+    "styles/pf2e-sheet.css",
+    "styles/license.css"
+  ],
+  "languages": [
+    {
+      "lang": "es",
+      "name": "Español",
+      "path": "lang/es.json"
+    },
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/en.json"
+    }
+  ]
+}

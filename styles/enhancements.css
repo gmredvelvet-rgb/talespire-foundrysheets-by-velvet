@@ -1,0 +1,328 @@
+/* Mejoras compartidas con la hoja Shadowdark, adaptadas al modelo D&D 5e. */
+
+.sss-window .sss-rail-actions { grid-template-columns: repeat(5, 1fr); }
+.sss-window .sss-rail-actions .is-on { color: var(--sss-gold-hi); }
+
+.sss-window .sss-loadout-btn { position: relative; }
+.sss-window .sss-loadout-number {
+  position: absolute;
+  right: -2px;
+  bottom: -1px;
+  display: grid;
+  place-items: center;
+  min-width: 15px;
+  height: 15px;
+  padding: 0 3px;
+  color: #fff4cc;
+  background: #17120b;
+  border: 1px solid #c79a45;
+  border-radius: 50%;
+  box-shadow: 0 1px 3px #000, 0 0 5px rgba(199, 154, 69, .32);
+  font-family: "SSPixelOp8", monospace;
+  font-size: 9px;
+  font-weight: 700;
+  line-height: 1;
+}
+.sss-window .sss-stage-btn.is-locked { cursor: default; opacity: .82; }
+
+.sss-window .sss-stage-img {
+  transform: var(--sss-portrait-offset, translate(0, 0));
+  transition: transform 200ms ease;
+}
+.sss-window .sss-stage-art.is-adjusting {
+  outline: 1px dashed var(--sss-gold-dim);
+  outline-offset: -3px;
+}
+.sss-window .sss-stage-art.is-adjusting .sss-stage-img { cursor: grab; transition: none; }
+.sss-window .sss-stage-art.is-dragging .sss-stage-img { cursor: grabbing; }
+.sss-window .sss-stage-art.is-adjusting .sss-doll-overlay { opacity: .2; pointer-events: none; }
+.sss-window .sss-framing {
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  left: 8px;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 8px;
+  border: 1px solid var(--sss-line-soft);
+  border-radius: 3px;
+  background: #0a0806ee;
+}
+.sss-window .sss-framing-hint { flex: 1 1 auto; color: var(--sss-ink-dim); font-size: 10px; }
+.sss-window .sss-framing-hint > i { margin-right: 4px; color: var(--sss-gold-dim); }
+
+/* Tablero de equipo escalable sobre el retrato. */
+.sss-window .sss-doll-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 8px 8px;
+  background: #060504bb;
+  pointer-events: none;
+}
+.sss-window .sss-doll-board {
+  position: relative;
+  width: calc(100% - 18px);
+  max-width: 448px;
+  max-height: 100%;
+  aspect-ratio: 1023 / 885;
+  pointer-events: none;
+}
+.sss-window .sss-doll-tray {
+  position: absolute;
+  left: 23.75%;
+  top: 82.1%;
+  z-index: 1;
+  width: 52.5%;
+  height: 17.7%;
+  max-width: none;
+  object-fit: fill;
+  border: 0;
+  filter: grayscale(.12) brightness(1.16) contrast(1.18) drop-shadow(0 2px 3px #000d);
+  pointer-events: none;
+}
+.sss-window .sss-doll-board .sss-slot,
+.sss-window .sss-doll-board .sss-slot:hover,
+.sss-window .sss-doll-board .sss-slot.sss-over {
+  position: absolute;
+  left: var(--sx, 0);
+  top: var(--sy, 0);
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--sw, 10%);
+  height: var(--sh, 10%);
+  min-width: 0;
+  min-height: 0;
+  padding: 0;
+  background: transparent;
+  background-image: none;
+  border-color: transparent;
+  border-radius: 2px;
+  box-shadow: none;
+  pointer-events: auto;
+}
+.sss-window .sss-doll-board .sss-slot:hover,
+.sss-window .sss-doll-board .sss-slot.sss-over {
+  filter: drop-shadow(0 0 5px #e2c48999);
+}
+.sss-window .sss-doll-board .sss-slot-template {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: contain;
+  border: 0;
+  opacity: 1;
+  filter: brightness(1.12) contrast(1.18) saturate(1.04) drop-shadow(0 1px 2px #000e);
+  pointer-events: none;
+}
+.sss-window .sss-doll-board .sss-slot-art {
+  position: absolute;
+  inset: 4%;
+  z-index: 1;
+  display: block;
+  width: 92%;
+  height: 92%;
+  max-width: none;
+  object-fit: contain;
+  border: 0;
+  opacity: 1;
+  filter: brightness(1.18) contrast(1.22) drop-shadow(0 2px 4px #000f) drop-shadow(0 0 1px #fff8);
+  pointer-events: none;
+}
+.sss-window .sss-doll-board .sss-slot.sss-filled .sss-slot-art { opacity: 0; }
+.sss-window .sss-doll-board .sss-slot-label { display: none; }
+.sss-window .sss-doll-board .sss-slot .sss-item {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 84%;
+  height: 84%;
+  max-width: none;
+  max-height: none;
+  overflow: visible;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+.sss-window .sss-doll-board .sss-slot .sss-item > .sss-item-icon {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+  object-fit: contain;
+  border: 0;
+  filter: drop-shadow(0 2px 3px #000e);
+}
+.sss-window .sss-doll-board .sss-slot[data-belt-index] {
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+.sss-window .sss-doll-board .sss-slot[data-belt-index]:hover,
+.sss-window .sss-doll-board .sss-slot[data-belt-index].sss-over {
+  box-shadow: inset 0 0 0 1px #d7b654b8;
+}
+.sss-window .sss-doll-board .sss-slot[data-belt-index] .sss-item { width: 92%; height: 92%; }
+.sss-window .sss-doll-board .sss-slot[data-belt-index]::after { content: none; display: none; }
+.sss-window .sss-doll-board .sss-icon-square .sss-item-icon { transform: scale(1.1); }
+.sss-window .sss-doll-board .sss-icon-portrait .sss-item-icon { transform: translateY(-4%) scale(1.04); }
+.sss-window .sss-doll-board .sss-icon-landscape .sss-item-icon { transform: scale(1.06); }
+.sss-window .sss-doll-board .sss-slot.sss-over-bad { filter: drop-shadow(0 0 6px #a11); }
+
+/*
+ * La imagen queda físicamente encerrada en su huella. Foundry y algunas hojas
+ * 5e añaden reglas de `height:auto` a los PNG; sin estos límites una espada de
+ * 108×540 px conserva su alto nativo y atraviesa varias piezas del inventario.
+ */
+.sss-window .sss-grid .sss-tile {
+  box-sizing: border-box;
+  overflow: visible;
+  isolation: isolate;
+}
+.sss-window .sss-grid .sss-tile > .sss-item-viewport {
+  position: absolute;
+  inset: 1px;
+  z-index: 1;
+  display: grid;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  place-items: center;
+  border-radius: 2px;
+  pointer-events: none;
+}
+.sss-window .sss-grid .sss-tile > .sss-item-viewport > img.sss-item-icon {
+  position: absolute;
+  inset: 1px;
+  display: block;
+  box-sizing: border-box;
+  width: calc(100% - 2px) !important;
+  height: calc(100% - 2px) !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  max-width: calc(100% - 2px) !important;
+  max-height: calc(100% - 2px) !important;
+  padding: 0 !important;
+  object-fit: contain !important;
+  object-position: center center;
+  transform: none !important;
+}
+.sss-window .sss-grid .sss-tile > .sss-qty,
+.sss-window .sss-grid .sss-tile > .sss-attune-mark { z-index: 2; }
+
+/* Monedas y operaciones. */
+.sss-window .sss-coins-wrapper { display: flex; align-items: stretch; gap: 5px; margin-bottom: 10px; }
+.sss-window .sss-coins-wrapper .sss-coins { flex: 1 1 auto; margin-bottom: 0; }
+.sss-window .sss-coins-actions {
+  display: grid;
+  flex: 0 0 51px;
+  grid-template-columns: repeat(2, 24px);
+  grid-template-rows: repeat(2, minmax(24px, 1fr));
+  gap: 3px;
+}
+.sss-window .sss-coin-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  padding: 0;
+  border: 1px solid var(--sss-line-soft);
+  border-radius: 3px;
+  background: #14110b;
+  color: var(--sss-gold-dim);
+  font-size: 10px;
+  cursor: pointer;
+}
+.sss-window .sss-coin-btn:hover { border-color: var(--sss-gold-dim); color: var(--sss-gold-hi); }
+.sss-window .sss-coin-btn:disabled { color: #5f5747; cursor: not-allowed; opacity: .55; }
+
+.sss-coin-dialog .sss-coin-adjust-form,
+.sss-coin-dialog .sss-coin-convert-form { display: grid; gap: 10px; padding: 4px; }
+.sss-coin-dialog .sss-coin-adjust-form > label {
+  display: grid;
+  grid-template-columns: 92px 1fr;
+  align-items: center;
+  gap: 8px;
+}
+.sss-coin-dialog .sss-coin-holdings {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 5px;
+  margin: 0;
+}
+.sss-coin-dialog .sss-coin-holdings > span {
+  padding: 6px 3px;
+  border: 1px solid #6b5a3366;
+  border-radius: 3px;
+  font-size: 10px;
+  text-align: center;
+}
+.sss-coin-dialog .sss-coin-holdings b { color: #d6aa52; }
+.sss-coin-dialog .sss-coin-rates { display: flex; flex-wrap: wrap; gap: 6px 12px; color: #8f8268; font-size: 11px; }
+
+/* Selector de destinatario para monedas y objetos. */
+.sss-pick .sss-pick-body { display: flex; flex-direction: column; gap: 8px; }
+.sss-pick .sss-pick-search { display: flex; align-items: center; gap: 6px; padding: 4px 8px; border: 1px solid #ffffff1f; border-radius: 3px; }
+.sss-pick .sss-pick-search input { flex: 1 1 auto; border: 0; background: transparent; }
+.sss-pick .sss-pick-list { display: flex; flex-direction: column; max-height: 260px; gap: 2px; overflow-y: auto; }
+.sss-pick .sss-pick-row { display: flex; align-items: center; gap: 8px; padding: 4px 6px; border-radius: 3px; cursor: pointer; }
+.sss-pick .sss-pick-row.is-hidden { display: none; }
+.sss-pick .sss-pick-row:hover { background: #ffffff12; }
+.sss-pick .sss-pick-row:has(input:checked) { background: #ffffff1a; outline: 1px solid #a98a4b; }
+.sss-pick .sss-pick-row img { width: 30px; height: 30px; border: 0; border-radius: 3px; object-fit: cover; }
+.sss-pick .sss-pick-name { flex: 1 1 auto; }
+.sss-pick .sss-pick-fields { display: flex; gap: 8px; padding-top: 8px; border-top: 1px solid #ffffff1f; }
+.sss-pick .sss-pick-fields label { display: flex; flex: 1 1 0; align-items: center; gap: 5px; font-size: 11px; }
+.sss-pick .sss-pick-fields input { width: 100%; min-width: 0; }
+.sss-pick .sss-pick-coins { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.sss-pick .sss-pick-coins label { display: grid; gap: 3px; }
+.sss-give-card { display: flex; align-items: center; gap: 8px; }
+.sss-give-card > i { color: #c8a24a; }
+
+/* Administración completa de efectos. */
+.sss-window .sss-effects-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 8px; border-bottom: 1px solid var(--sss-line-soft); }
+.sss-window .sss-effects-head .sss-panel-title { margin: 0; border-bottom: 0; }
+.sss-window .sss-effect-add { display: inline-flex; align-items: center; gap: 5px; min-height: 26px; padding: 3px 8px; border: 1px solid var(--sss-line-soft); border-radius: 3px; background: var(--sss-panel); color: var(--sss-gold-dim); font-family: inherit; font-size: 10px; font-variant: small-caps; cursor: pointer; }
+.sss-window .sss-effect-add:hover { border-color: var(--sss-line); color: var(--sss-gold-hi); }
+.sss-window .sss-effect-row.is-suppressed { opacity: .62; }
+.sss-window .sss-effect-row .sss-row-name small { display: block; margin-top: 2px; color: #b89262; font-size: 9px; }
+.sss-window .sss-effect-actions { display: inline-flex; flex: 0 0 auto; gap: 3px; }
+.sss-window .sss-effect-actions .sss-mini-btn { display: grid; place-items: center; width: 25px; height: 23px; padding: 0; }
+.sss-window .sss-effect-actions .sss-mini-btn.is-danger:hover { border-color: var(--sss-red); color: #e8a3a3; }
+.sss-window .sss-cweapon > .sss-mini-btn { flex: 0 0 24px; width: 24px; height: 22px; padding: 0; }
+
+/* Configuración mundial de escenas para el cambio. */
+.sss-coin-scenes-config { display: flex; flex-direction: column; gap: 10px; padding: 8px; }
+.sss-coin-scenes-config .sss-coin-scenes-hint { margin: 0; color: var(--color-text-secondary, #777); line-height: 1.35; }
+.sss-coin-scenes-config .sss-coin-scenes-list { display: flex; flex-direction: column; max-height: 330px; gap: 3px; padding: 4px; overflow-y: auto; border: 1px solid var(--color-border-light-tertiary, #aaa6); border-radius: 4px; }
+.sss-coin-scenes-config .sss-coin-scene-row { display: grid; grid-template-columns: 18px 18px 1fr; align-items: center; gap: 7px; min-height: 30px; padding: 3px 6px; border-radius: 3px; }
+.sss-coin-scenes-config .sss-coin-scene-row:hover { background: #ffffff0d; }
+.sss-coin-scenes-config .sss-coin-scene-row input { margin: 0; }
+.sss-coin-scenes-config .sss-coin-scene-row i { color: #bda06a; text-align: center; }
+.sss-coin-scenes-config .sss-coin-scenes-footer { display: flex; justify-content: flex-end; padding-top: 4px; }
+.sss-coin-scenes-config .sss-coin-scenes-footer button { width: auto; }
+
+/* Host ApplicationV2 para separar hojas V1 en Foundry 14. */
+.sss-native-detach-host > .window-content { padding: 0; overflow: hidden; }
+.sss-native-detach-host .sss-native-detach-content { width: 100%; height: 100%; min-width: 0; min-height: 0; overflow: hidden; }
+.sss-native-detach-host .sss-detached-sheet-root { position: relative !important; inset: auto !important; z-index: auto !important; width: 100% !important; height: 100% !important; min-width: 0 !important; min-height: 0 !important; max-width: none !important; max-height: none !important; margin: 0 !important; box-shadow: none !important; }
+.sss-native-detach-host .sss-detached-sheet-root > .window-header { display: none !important; }
+.sss-native-detach-host .sss-detached-sheet-root > .window-content { height: 100% !important; border-radius: 0; }
+
+@media (max-width: 800px) {
+  .sss-coin-dialog .sss-coin-holdings,
+  .sss-pick .sss-pick-coins { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}

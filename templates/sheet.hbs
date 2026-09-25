@@ -1,0 +1,768 @@
+{{!--
+  Hoja 5e — distribución en tres columnas:
+    · Izquierda: insignia de nivel, identidad y navegación de pestañas.
+    · Centro:    retrato a cuerpo entero (con paperdoll conmutable encima).
+    · Derecha:   contenido de la pestaña activa.
+--}}
+
+{{#*inline "ssSlot"}}
+<div class="sss-slot {{#if item}}sss-filled{{/if}} {{#if twoHanded}}sss-twohand{{/if}} {{#if frameUrl}}has-frame{{/if}}"
+     data-sss-slot="{{key}}" {{#if beltIndex}}data-belt-index="{{beltIndex}}"{{/if}}
+     {{#if item.rarity}}data-rarity="{{item.rarity.key}}"{{/if}}
+     style="--sx:{{pos.x}}%;--sy:{{pos.y}}%;--sw:{{pos.w}}%;--sh:{{pos.h}}%;{{#if item.rarity}}--sss-rar:{{item.rarity.color}};--sss-rar-glow:{{item.rarity.glow}};{{/if}}"
+     title="{{labelText}}{{#if twoHanded}} — ocupada por el arma a dos manos{{/if}}">
+  {{#if frameUrl}}
+    <img class="sss-slot-template" src="{{frameUrl}}" alt="" aria-hidden="true" draggable="false">
+  {{/if}}
+  {{#if artUrl}}
+    <img class="sss-slot-art" src="{{artUrl}}" alt="" aria-hidden="true" draggable="false">
+  {{/if}}
+  {{#if item}}
+    <div class="sss-item sss-draggable {{item.iconClass}}" data-sss-item="{{item.id}}"
+         data-icon-w="{{item.iconW}}" data-icon-h="{{item.iconH}}" draggable="true">
+      <img class="sss-item-icon" src="{{item.img}}" data-sss-image-fallback="icons/svg/item-bag.svg"
+           alt="{{item.name}}" draggable="false">
+      {{#if item.qty}}<span class="sss-qty">{{item.qty}}</span>{{/if}}
+    </div>
+  {{/if}}
+  <span class="sss-slot-label">{{labelText}}</span>
+</div>
+{{/inline}}
+
+<form class="{{cssClass}} sss-root" autocomplete="off">
+
+  {{!-- ══════════════ COLUMNA IZQUIERDA ══════════════ --}}
+  <aside class="sss-rail">
+    <div class="sss-badge" title="Nivel {{ss.identity.level}}">
+      <span class="sss-badge-num">{{ss.identity.level}}</span>
+    </div>
+
+    <div class="sss-rail-id">
+      <h1 class="sss-rail-name">{{ss.identity.name}}</h1>
+      {{#if ss.identity.classText}}<p class="sss-rail-sub">{{ss.identity.classText}}</p>{{/if}}
+      {{#if ss.identity.race}}<p class="sss-rail-sub">{{ss.identity.race}}</p>{{/if}}
+    </div>
+
+    <nav class="sss-nav">
+      {{#each ss.tabs}}
+        <button type="button" class="sss-nav-item {{#if active}}is-active{{/if}}" data-sss-tab="{{key}}">
+          <i class="fas {{icon}}" aria-hidden="true"></i>
+          <span>{{label}}</span>
+          {{#if badge}}<b class="sss-nav-badge">{{badge}}</b>{{/if}}
+        </button>
+      {{/each}}
+    </nav>
+
+    <div class="sss-rail-actions">
+      <button type="button" data-action="sss-short-rest" data-tooltip="Descanso corto"><i class="fas fa-mug-hot"></i></button>
+      <button type="button" data-action="sss-long-rest" data-tooltip="Descanso largo"><i class="fas fa-bed"></i></button>
+      <button type="button" data-action="sss-initiative" data-tooltip="Tirar iniciativa"><i class="fas fa-hand-fist"></i></button>
+      <button type="button" data-action="sss-portrait" data-tooltip="Cambiar retrato"><i class="fas fa-image"></i></button>
+      <button type="button" class="{{#if ss.portraitAdjust}}is-on{{/if}}" data-action="sss-adjust-portrait"
+              data-tooltip="Encuadrar retrato"><i class="fas fa-up-down-left-right"></i></button>
+    </div>
+  </aside>
+
+  {{!-- ══════════════ COLUMNA CENTRAL: RETRATO ══════════════ --}}
+  <section class="sss-stage">
+    <div class="sss-stage-tools">
+      <div class="sss-stage-tools-left">
+        <button type="button" class="sss-stage-btn {{#if ss.showDoll}}is-on{{/if}} {{#if ss.dollForced}}is-locked{{/if}}"
+                data-action="sss-toggle-doll"
+                data-tooltip="{{#if ss.dollForced}}Las ranuras están siempre visibles en Inventario{{else}}Equipo{{/if}}">
+          <i class="fas fa-shield-halved"></i>
+        </button>
+        {{#if ss.hasLoadouts}}
+          <button type="button" class="sss-stage-btn sss-loadout-btn" data-action="sss-cycle-loadout"
+                  data-loadout-index="{{ss.loadout.index}}" data-tooltip="{{ss.loadout.tooltip}}">
+            <i class="fas fa-repeat"></i>
+            <span class="sss-loadout-number" aria-label="Conjunto de armas {{ss.loadout.number}}">{{ss.loadout.number}}</span>
+          </button>
+        {{/if}}
+      </div>
+      <button type="button" class="sss-stage-btn" data-action="sss-configure" data-tooltip="Configurar hoja">
+        <i class="fas fa-gear"></i>
+      </button>
+    </div>
+
+    <div class="sss-stage-art {{#if ss.portraitAdjust}}is-adjusting{{/if}}">
+      <img class="sss-stage-img" src="{{ss.portrait}}" alt="{{ss.identity.name}}" draggable="false"
+           style="--sss-portrait-offset: {{ss.portraitOffset}}">
+
+      {{#if ss.portraitAdjust}}
+        <div class="sss-framing">
+          <span class="sss-framing-hint"><i class="fas fa-up-down-left-right"></i> Arrastra para mover · rueda para acercar</span>
+          <button type="button" class="sss-mini-btn" data-action="sss-portrait-reset">Restaurar</button>
+          <button type="button" class="sss-mini-btn" data-action="sss-adjust-portrait">Listo</button>
+        </div>
+      {{/if}}
+
+      {{#if ss.showDoll}}
+        <div class="sss-doll-overlay">
+          <div class="sss-doll-board">
+            <img class="sss-doll-tray" src="modules/talespire-foundrysheets-by-velvet/assets/slots/frame-consumables.png"
+                 alt="" aria-hidden="true" draggable="false">
+            {{#each ss.slotList}}{{> ssSlot this}}{{/each}}
+          </div>
+        </div>
+      {{/if}}
+    </div>
+
+    <footer class="sss-stage-foot">
+      <span class="sss-stage-orn">✦ ─── ✦ ─── ✦</span>
+      <h2 class="sss-stage-name">{{ss.identity.name}}</h2>
+      <p class="sss-stage-sub">{{ss.identity.subtitle}}{{#if ss.identity.level}} · Nivel {{ss.identity.level}}{{/if}}</p>
+    </footer>
+  </section>
+
+  {{!-- ══════════════ COLUMNA DERECHA: CONTENIDO ══════════════ --}}
+  <section class="sss-panel" data-sss-panel>
+
+    {{!-- ─────────── ATRIBUTOS ─────────── --}}
+    <div class="sss-tab {{#if ss.is.attributes}}is-active{{/if}}" data-sss-tabpanel="attributes">
+      <h3 class="sss-panel-title">Atributos</h3>
+
+      <div class="sss-tiles">
+        <div class="sss-tile-stat" data-tooltip="Clase de Armadura"><b>{{ss.vitals.ac}}</b><span>CA</span></div>
+        <div class="sss-tile-stat" data-action="sss-initiative" data-tooltip="Tirar iniciativa">
+          <b>{{ss.vitals.initText}}</b><span>Iniciativa</span>
+        </div>
+        <div class="sss-tile-stat"><b>{{ss.vitals.speed}}</b><span>Velocidad</span></div>
+        <div class="sss-tile-stat"><b>+{{ss.vitals.prof}}</b><span>Comp.</span></div>
+      </div>
+
+      <div class="sss-abils">
+        {{#each ss.abilities}}
+          <button type="button" class="sss-abil" data-action="sss-roll-ability" data-ability="{{key}}"
+                  data-tooltip="Prueba de {{label}}">
+            <span class="sss-abil-key">{{abbr}}</span>
+            <b class="sss-abil-val">{{value}}</b>
+            <span class="sss-abil-mod">{{modText}}</span>
+          </button>
+        {{/each}}
+      </div>
+
+      {{!-- Puntos de golpe --}}
+      <div class="sss-hp">
+        <div class="sss-hp-track">
+          <div class="sss-hp-fill" style="width:{{ss.hp.pct}}%"></div>
+          <span class="sss-hp-text">
+            <b>PG</b>
+            <input type="text" name="system.attributes.hp.value" value="{{ss.hp.value}}" data-dtype="Number">
+            <em>/ {{ss.hp.max}}</em>
+          </span>
+        </div>
+        <label class="sss-hp-temp">
+          <span>PG temp.</span>
+          <input type="text" name="system.attributes.hp.temp" value="{{ss.hp.temp}}" data-dtype="Number">
+        </label>
+      </div>
+
+      {{#if ss.vitals.xp.show}}
+        <div class="sss-xp" data-tooltip="Experiencia">
+          <div class="sss-xp-fill" style="width:{{ss.vitals.xp.pct}}%"></div>
+          <span class="sss-xp-text">XP {{ss.vitals.xp.value}} / {{ss.vitals.xp.max}}</span>
+        </div>
+      {{/if}}
+
+      {{!-- Objetos anclados desde el inventario (clic derecho → Anclar) --}}
+      {{#if ss.pinned.length}}
+        <section class="sss-block">
+          <h4 class="sss-block-title">Anclados <i class="fas fa-thumbtack"></i></h4>
+          <ul class="sss-pins">
+            {{#each ss.pinned}}
+              <li class="sss-pin {{#if equipped}}is-equipped{{/if}}" data-sss-item="{{id}}">
+                <img class="sss-row-img" src="{{img}}" alt="" draggable="false">
+                <span class="sss-pin-name">{{name}}</span>
+                {{#if uses}}<span class="sss-pin-uses">{{uses.value}}/{{uses.max}}</span>
+                {{else if qty}}<span class="sss-pin-uses">×{{qty}}</span>{{/if}}
+                <button type="button" class="sss-mini-btn" data-action="sss-use" data-item-id="{{id}}">Usar</button>
+              </li>
+            {{/each}}
+          </ul>
+        </section>
+      {{/if}}
+
+      {{!-- Salvaciones de muerte --}}
+      <section class="sss-block">
+        <h4 class="sss-block-title">{{#if ss.isPf2e}}Heridas y muerte{{else}}Salvaciones de muerte{{/if}} <i class="fas fa-skull"></i></h4>
+        <div class="sss-death">
+          <div class="sss-death-row">
+            <span>{{#if ss.isPf2e}}Herido{{else}}Éxitos{{/if}}</span>
+            <div class="sss-death-boxes">
+              {{#each ss.vitals.death.successBoxes}}
+                <button type="button" class="sss-death-box {{#if on}}is-on{{/if}}"
+                        data-action="sss-death" data-kind="success" data-n="{{n}}"></button>
+              {{/each}}
+            </div>
+          </div>
+          <div class="sss-death-row">
+            <span>{{#if ss.isPf2e}}Moribundo{{else}}Fallos{{/if}}</span>
+            <div class="sss-death-boxes is-fail">
+              {{#each ss.vitals.death.failureBoxes}}
+                <button type="button" class="sss-death-box {{#if on}}is-on{{/if}}"
+                        data-action="sss-death" data-kind="failure" data-n="{{n}}"></button>
+              {{/each}}
+            </div>
+          </div>
+          <button type="button" class="sss-mini-btn" data-action="sss-roll-death">Tirar salvación</button>
+        </div>
+      </section>
+
+      {{!-- Dados de golpe --}}
+      <section class="sss-block">
+        <h4 class="sss-block-title">{{#if ss.isPf2e}}Puntos de héroe{{else}}Dados de golpe{{/if}}</h4>
+        <div class="sss-hd">
+          <span class="sss-hd-denom">{{ss.vitals.hitDice.denom}}</span>
+          <b>{{ss.vitals.hitDice.value}} / {{ss.vitals.hitDice.max}}</b>
+        </div>
+      </section>
+
+      {{!-- Sentidos --}}
+      {{#if ss.details.senses.length}}
+        <section class="sss-block">
+          <h4 class="sss-block-title">Sentidos <i class="fas fa-eye"></i></h4>
+          <ul class="sss-taglist">
+            {{#each ss.details.senses}}<li>{{this}}</li>{{/each}}
+          </ul>
+        </section>
+      {{/if}}
+
+      {{!-- Clases, subclases, especie y trasfondo --}}
+      {{#if ss.details.classes.length}}
+        <section class="sss-block">
+          <h4 class="sss-block-title">Clases</h4>
+          {{#each ss.details.classes}}
+            <div class="sss-idrow" data-sss-item="{{id}}">
+              <img class="sss-row-img" src="{{img}}" alt="" draggable="false">
+              <span class="sss-idrow-main">
+                {{name}} {{levels}}
+                {{#if subclass}}<em>{{subclass.name}}</em>{{/if}}
+              </span>
+              <button type="button" class="sss-mini-btn" data-action="sss-edit-item" data-item-id="{{id}}"
+                      data-tooltip="Editar"><i class="fas fa-pen"></i></button>
+            </div>
+          {{/each}}
+        </section>
+      {{/if}}
+
+      {{#if ss.details.species}}
+        <div class="sss-idrow" data-sss-item="{{ss.details.species.id}}">
+          <img class="sss-row-img" src="{{ss.details.species.img}}" alt="" draggable="false">
+          <span class="sss-idrow-main">{{ss.details.species.name}}</span>
+          <button type="button" class="sss-mini-btn" data-action="sss-edit-item"
+                  data-item-id="{{ss.details.species.id}}" data-tooltip="Editar"><i class="fas fa-pen"></i></button>
+        </div>
+      {{/if}}
+
+      {{#if ss.details.background}}
+        <div class="sss-idrow" data-sss-item="{{ss.details.background.id}}">
+          <img class="sss-row-img" src="{{ss.details.background.img}}" alt="" draggable="false">
+          <span class="sss-idrow-main">{{ss.details.background.name}}</span>
+          <button type="button" class="sss-mini-btn" data-action="sss-edit-item"
+                  data-item-id="{{ss.details.background.id}}" data-tooltip="Editar"><i class="fas fa-pen"></i></button>
+        </div>
+      {{/if}}
+
+      {{!-- Defensas --}}
+      {{#if ss.details.defenses.length}}
+        <section class="sss-block">
+          <h4 class="sss-block-title">Defensas <i class="fas fa-shield-halved"></i></h4>
+          {{#each ss.details.defenses}}
+            <div class="sss-profrow">
+              <span class="sss-prof-label">{{label}}</span>
+              <span class="sss-prof-values">{{values}}</span>
+            </div>
+          {{/each}}
+        </section>
+      {{/if}}
+
+      {{!-- Competencias --}}
+      {{#if ss.details.proficiencies.length}}
+        <section class="sss-block">
+          <h4 class="sss-block-title">Competencias</h4>
+          {{#each ss.details.proficiencies}}
+            <div class="sss-profrow">
+              <span class="sss-prof-label"><i class="fas {{icon}}"></i> {{label}}</span>
+              <span class="sss-prof-values">{{values}}</span>
+            </div>
+          {{/each}}
+        </section>
+      {{/if}}
+
+      {{!-- Salvaciones --}}
+      <section class="sss-block">
+        <h4 class="sss-block-title">Tiradas de salvación</h4>
+        <ul class="sss-list">
+          {{#each ss.saves}}
+            <li class="sss-row" data-action="sss-roll-save" data-ability="{{key}}">
+              <i class="fas fa-diamond {{#unless proficient}}sss-dim{{/unless}}"></i>
+              <span class="sss-row-name">{{label}}</span>
+              <b class="sss-row-val">{{totalText}}</b>
+            </li>
+          {{/each}}
+        </ul>
+      </section>
+    </div>
+
+    {{!-- ─────────── HABILIDADES ─────────── --}}
+    <div class="sss-tab {{#if ss.is.skills}}is-active{{/if}}" data-sss-tabpanel="skills">
+      <h3 class="sss-panel-title">Habilidades</h3>
+      <ul class="sss-list">
+        {{#each ss.skills}}
+          <li class="sss-row" data-action="sss-roll-skill" data-skill="{{key}}">
+            <i class="fas fa-diamond {{#unless proficient}}sss-dim{{/unless}} {{#if expertise}}sss-expert{{/if}}"></i>
+            <span class="sss-row-name">{{label}}</span>
+            <span class="sss-row-tag">{{ability}}</span>
+            <b class="sss-row-val">{{totalText}}</b>
+            <span class="sss-row-passive" data-tooltip="Pasiva">{{passive}}</span>
+          </li>
+        {{/each}}
+      </ul>
+    </div>
+
+    {{!-- ─────────── INVENTARIO ─────────── --}}
+    <div class="sss-tab {{#if ss.is.inventory}}is-active{{/if}}" data-sss-tabpanel="inventory">
+      <h3 class="sss-panel-title">Inventario</h3>
+
+      <div class="sss-coins-wrapper">
+        <div class="sss-coins">
+          {{#each ss.currency}}
+            <label class="sss-coin sss-coin-{{key}}" data-tooltip="{{title}}">
+              <img class="sss-coin-img" src="{{icon}}" alt="" draggable="false">
+              {{#if ../ss.isPf2e}}
+                <input type="text" value="{{value}}" readonly>
+              {{else}}
+                <input type="text" name="system.currency.{{key}}" value="{{value}}" data-dtype="Number">
+              {{/if}}
+              <span>{{label}}</span>
+            </label>
+          {{/each}}
+        </div>
+        <div class="sss-coins-actions">
+          <button type="button" class="sss-coin-btn" data-action="sss-adjust-coins" data-mode="add"
+                  data-tooltip="Sumar monedas"><i class="fas fa-plus"></i></button>
+          <button type="button" class="sss-coin-btn" data-action="sss-adjust-coins" data-mode="subtract"
+                  data-tooltip="Restar monedas"><i class="fas fa-minus"></i></button>
+          <button type="button" class="sss-coin-btn" data-action="sss-give-coins"
+                  data-tooltip="Dar monedas a otro personaje"><i class="fas fa-handshake"></i></button>
+          <button type="button" class="sss-coin-btn" data-action="sss-convert-coins"
+                  data-tooltip="{{ss.coinExchange.tooltip}}" {{#unless ss.coinExchange.allowed}}disabled{{/unless}}>
+            <i class="fas fa-arrow-up-wide-short"></i>
+          </button>
+        </div>
+      </div>
+
+      {{!-- Barra de filtros y sintonización, entre las monedas y la grilla --}}
+      <div class="sss-invbar">
+        <div class="sss-filters" role="group" aria-label="Filtrar objetos">
+          {{#each ss.filters}}
+            <button type="button" class="sss-filter {{#if active}}is-active{{/if}} {{#if empty}}is-empty{{/if}}"
+                    data-action="sss-filter" data-group="{{key}}"
+                    data-tooltip="{{label}} ({{count}})" aria-pressed="{{active}}">
+              <i class="fas {{icon}}" aria-hidden="true"></i>
+            </button>
+          {{/each}}
+        </div>
+
+        <div class="sss-attune {{#if ss.attunement.over}}is-over{{/if}}"
+             data-tooltip="Objetos sintonizados{{#if ss.attunement.names}}: {{ss.attunement.names}}{{/if}}">
+          <i class="fas fa-sun" aria-hidden="true"></i>
+          <b>{{ss.attunement.value}}/{{ss.attunement.max}}</b>
+        </div>
+      </div>
+
+      {{!-- Grilla libre de Stoneshard: cada objeto donde lo dejes --}}
+      <div class="sss-grid-wrap">
+        <div class="sss-grid" data-sss-grid data-cols="{{ss.cols}}" data-rows="{{ss.rows}}"
+             style="--cols:{{ss.cols}};--rows:{{ss.rows}};">
+          {{#each ss.tiles}}
+            <div class="sss-item sss-tile sss-draggable {{iconClass}} {{#if rarity}}sss-rare{{/if}} {{#if attuned}}is-attuned{{/if}}"
+                 data-sss-item="{{id}}" data-group="{{group}}" draggable="true"
+                 data-x="{{x}}" data-y="{{y}}" data-w="{{w}}" data-h="{{h}}"
+                 style="--x:{{x}};--y:{{y}};--w:{{w}};--h:{{h}};{{#if rarity}}--sss-rar:{{rarity.color}};--sss-rar-glow:{{rarity.glow}};--sss-rar-bg:{{rarity.bg}};{{/if}}">
+              <span class="sss-item-viewport" aria-hidden="true">
+                <img class="sss-item-icon" src="{{img}}" data-sss-image-fallback="icons/svg/item-bag.svg"
+                     alt="" draggable="false">
+              </span>
+              {{#if qty}}<span class="sss-qty">{{qty}}</span>{{/if}}
+              {{#if attuned}}<i class="fas fa-sun sss-attune-mark" aria-hidden="true"></i>{{/if}}
+            </div>
+          {{/each}}
+        </div>
+      </div>
+
+      <footer class="sss-enc">
+        <span>Peso</span>
+        <div class="sss-enc-track"><div class="sss-enc-fill" style="width:{{ss.enc.pct}}%"></div></div>
+        <b>{{ss.enc.value}} / {{ss.enc.max}}</b>
+      </footer>
+
+      {{!-- Resumen de combate: lo que importa saber sin cambiar de pestaña --}}
+      <section class="sss-combat">
+        <div class="sss-combat-top">
+          <div class="sss-cstat" data-tooltip="Clase de Armadura">
+            <i class="fas fa-shield-halved"></i><b>{{ss.combat.ac}}</b><span>CA</span>
+          </div>
+          <div class="sss-cstat" data-tooltip="Iniciativa">
+            <i class="fas fa-bolt"></i><b>{{ss.combat.initiative}}</b><span>Ini</span>
+          </div>
+          <div class="sss-cstat" data-tooltip="Bonificador de competencia">
+            <i class="fas fa-certificate"></i><b>{{ss.combat.prof}}</b><span>Comp</span>
+          </div>
+          {{#each ss.combat.saveDcs}}
+            <div class="sss-cstat" data-tooltip="{{label}} ({{ability}})">
+              <i class="fas fa-hand-sparkles"></i><b>{{value}}</b><span>{{ability}}</span>
+            </div>
+          {{/each}}
+        </div>
+
+        {{#if ss.combat.weapons.length}}
+          <div class="sss-combat-weapons">
+            {{#each ss.combat.weapons}}
+              <div class="sss-cweapon" data-sss-item="{{id}}">
+                <img class="sss-row-img" src="{{img}}" alt="" draggable="false">
+                <span class="sss-cweapon-name">{{name}}</span>
+                {{#if attack}}<span class="sss-cweapon-atk">{{attack}}</span>{{/if}}
+                <span class="sss-cweapon-dmg">{{damage}}</span>
+                <button type="button" class="sss-mini-btn" data-action="sss-use-activity"
+                        data-item-id="{{id}}" data-activity-id="{{activityId}}" data-tooltip="Atacar con {{name}}">
+                  <i class="fas fa-dice-d20"></i>
+                </button>
+              </div>
+            {{/each}}
+          </div>
+        {{else}}
+          <p class="sss-empty sss-combat-empty">Sin armas equipadas.</p>
+        {{/if}}
+      </section>
+    </div>
+
+    {{!-- ─────────── ACCIONES PF2E ─────────── --}}
+    <div class="sss-tab {{#if ss.is.actions}}is-active{{/if}}" data-sss-tabpanel="actions">
+      <h3 class="sss-panel-title">Acciones</h3>
+
+      <div class="sss-search">
+        <i class="fas fa-search"></i>
+        <input type="text" placeholder="Buscar acciones…" data-sss-filter="actions">
+      </div>
+
+      {{#if ss.actions.strikes.length}}
+        <section class="sss-block sss-action-section">
+          <h4 class="sss-block-title">Ataques y Elemental Blasts</h4>
+          <ul class="sss-list">
+            {{#each ss.actions.strikes}}
+              <li class="sss-row sss-row-item sss-action-row" data-sss-entry data-name="{{name}}">
+                <img class="sss-row-img" src="{{img}}" alt="" draggable="false">
+                <span class="sss-row-name">
+                  {{name}}
+                  {{#if traits}}<em>{{traits}}</em>{{/if}}
+                </span>
+                <span class="sss-strike-buttons">
+                  {{#each variants}}
+                    <button type="button" class="sss-mini-btn" data-action="sss-strike-attack"
+                            data-strike-index="{{../index}}" data-variant="{{variantIndex}}"
+                            data-tooltip="Ataque {{../name}}">{{label}}</button>
+                  {{/each}}
+                  {{#if canDamage}}
+                    <button type="button" class="sss-mini-btn is-damage" data-action="sss-strike-damage"
+                            data-strike-index="{{index}}" data-tooltip="Daño"><i class="fas fa-burst"></i></button>
+                  {{/if}}
+                  {{#if canCritical}}
+                    <button type="button" class="sss-mini-btn is-critical" data-action="sss-strike-critical"
+                            data-strike-index="{{index}}" data-tooltip="Daño crítico"><i class="fas fa-skull"></i></button>
+                  {{/if}}
+                </span>
+              </li>
+            {{/each}}
+          </ul>
+        </section>
+      {{/if}}
+
+      {{#each ss.actions.encounter}}
+        {{#if items.length}}
+          <section class="sss-block sss-action-section">
+            <h4 class="sss-block-title">{{label}}</h4>
+            <ul class="sss-list">
+              {{#each items}}
+                <li class="sss-row sss-row-item sss-action-row" data-sss-entry data-sss-item="{{id}}" data-name="{{name}}">
+                  <img class="sss-row-img" src="{{img}}" alt="" draggable="false">
+                  <span class="sss-action-cost" data-tooltip="Costo de acción">{{actionGlyph}}</span>
+                  <span class="sss-row-name">
+                    {{name}}
+                    {{#if traits}}<em>{{traits}}</em>{{/if}}
+                  </span>
+                  {{#if frequency}}<span class="sss-action-frequency">{{frequency}}</span>{{/if}}
+                  <button type="button" class="sss-mini-btn" data-action="sss-use" data-item-id="{{id}}">Usar</button>
+                </li>
+              {{/each}}
+            </ul>
+          </section>
+        {{/if}}
+      {{/each}}
+
+      {{#if ss.actions.exploration.length}}
+        <section class="sss-block sss-action-section">
+          <h4 class="sss-block-title">Exploración</h4>
+          <ul class="sss-list">
+            {{#each ss.actions.exploration}}
+              <li class="sss-row sss-row-item sss-action-row" data-sss-entry data-sss-item="{{id}}" data-name="{{name}}">
+                <img class="sss-row-img" src="{{img}}" alt="" draggable="false">
+                <button type="button" class="sss-exploration-toggle {{#if active}}is-active{{/if}}"
+                        data-action="sss-toggle-exploration" data-item-id="{{id}}"
+                        data-tooltip="{{#if active}}Actividad de exploración activa{{else}}Activar para exploración{{/if}}">
+                  <i class="fas fa-compass"></i>
+                </button>
+                <span class="sss-row-name">
+                  {{name}}
+                  {{#if traits}}<em>{{traits}}</em>{{/if}}
+                </span>
+                {{#if frequency}}<span class="sss-action-frequency">{{frequency}}</span>{{/if}}
+                <button type="button" class="sss-mini-btn" data-action="sss-use" data-item-id="{{id}}">Usar</button>
+              </li>
+            {{/each}}
+          </ul>
+        </section>
+      {{/if}}
+
+      {{#if ss.actions.downtime.length}}
+        <section class="sss-block sss-action-section">
+          <h4 class="sss-block-title">Downtime</h4>
+          <ul class="sss-list">
+            {{#each ss.actions.downtime}}
+              <li class="sss-row sss-row-item sss-action-row" data-sss-entry data-sss-item="{{id}}" data-name="{{name}}">
+                <img class="sss-row-img" src="{{img}}" alt="" draggable="false">
+                <span class="sss-action-cost">{{actionGlyph}}</span>
+                <span class="sss-row-name">
+                  {{name}}
+                  {{#if traits}}<em>{{traits}}</em>{{/if}}
+                </span>
+                {{#if frequency}}<span class="sss-action-frequency">{{frequency}}</span>{{/if}}
+                <button type="button" class="sss-mini-btn" data-action="sss-use" data-item-id="{{id}}">Usar</button>
+              </li>
+            {{/each}}
+          </ul>
+        </section>
+      {{/if}}
+
+      {{#unless ss.actions.total}}
+        <p class="sss-empty">Este personaje no tiene acciones disponibles.</p>
+      {{/unless}}
+    </div>
+
+    {{!-- ─────────── CONJUROS ─────────── --}}
+    <div class="sss-tab {{#if ss.is.spells}}is-active{{/if}}" data-sss-tabpanel="spells">
+      <h3 class="sss-panel-title">Conjuros</h3>
+
+      <div class="sss-search">
+        <i class="fas fa-search"></i>
+        <input type="text" placeholder="Buscar conjuros…" data-sss-filter="spells">
+      </div>
+
+      <div class="sss-tiles sss-tiles-3">
+        <div class="sss-tile-stat" data-tooltip="{{ss.spellbook.abilityFull}}">
+          <b>{{ss.spellbook.ability}}</b><span>Aptitud</span>
+        </div>
+        <div class="sss-tile-stat" data-tooltip="CD de tus conjuros">
+          <b>{{ss.spellbook.dc}}</b><span>CD Salv.</span>
+        </div>
+        <div class="sss-tile-stat" data-action="sss-roll-spell-attack" data-tooltip="Tirar ataque de conjuro">
+          <b>{{ss.spellbook.attack}}</b><span>Ataque</span>
+        </div>
+      </div>
+
+      {{!-- Filtro por nivel --}}
+      <div class="sss-lvlfilters" role="group" aria-label="Filtrar por nivel">
+        {{#each ss.spellbook.filters}}
+          <button type="button" class="sss-lvlfilter {{#if active}}is-active{{/if}} {{#unless has}}is-empty{{/unless}}"
+                  data-action="sss-spell-level" data-level="{{level}}">{{label}}</button>
+        {{/each}}
+      </div>
+
+      {{!-- Espacios de conjuro --}}
+      {{#if ss.spellbook.slots.length}}
+        <section class="sss-block">
+          <h4 class="sss-block-title">Espacios de conjuro</h4>
+          <div class="sss-slotgrid">
+            {{#each ss.spellbook.slots}}
+              <div class="sss-slotrow">
+                <span class="sss-slotrow-label">{{label}}</span>
+                <div class="sss-pips">
+                  {{#each pips}}
+                    <button type="button" class="sss-pip {{#if filled}}is-on{{/if}}"
+                            data-action="sss-slot-pip" data-key="{{../key}}" data-index="{{index}}"
+                            data-tooltip="Clic: gastar · Clic derecho: recuperar">
+                      <i class="fas fa-fire"></i>
+                    </button>
+                  {{/each}}
+                </div>
+                <span class="sss-slotrow-count">{{value}}/{{max}}</span>
+              </div>
+            {{/each}}
+          </div>
+        </section>
+      {{/if}}
+
+      {{#if ss.spellbook.hasSpells}}
+        {{#each ss.spellbook.groups}}
+          <section class="sss-block" data-sss-level="{{level}}">
+            <h4 class="sss-block-title">
+              {{label}}
+              {{#if slots}}<span class="sss-slots">{{slots.value}}/{{slots.max}}</span>{{/if}}
+            </h4>
+            <ul class="sss-list sss-spell-list" data-sss-spell-list="{{level}}">
+              {{#each spells}}
+                <li class="sss-row sss-row-item sss-spell {{#unless active}}is-unprepared{{/unless}}"
+                    data-sss-entry data-sss-spell="{{id}}" data-item-id="{{id}}" data-name="{{name}}"
+                    draggable="true">
+                  {{#if canPrepare}}
+                    <button type="button" class="sss-prep {{#if prepared}}is-on{{/if}}"
+                            data-action="sss-prepare" data-item-id="{{id}}"
+                            data-tooltip="{{#if prepared}}Preparado{{else}}Sin preparar{{/if}}">
+                      <i class="fas fa-circle-check"></i>
+                    </button>
+                  {{else}}
+                    <span class="sss-prep is-fixed"></span>
+                  {{/if}}
+                  <img class="sss-row-img" src="{{img}}" alt="" draggable="false">
+                  <span class="sss-row-name">
+                    {{name}}
+                    {{#if school}}<em>{{school}}</em>{{/if}}
+                  </span>
+                  <button type="button" class="sss-mini-btn" data-action="sss-use" data-item-id="{{id}}">Lanzar</button>
+                </li>
+              {{/each}}
+            </ul>
+          </section>
+        {{/each}}
+      {{else}}
+        <p class="sss-empty">Este personaje no conoce conjuros.</p>
+      {{/if}}
+    </div>
+
+    {{!-- ─────────── DOTES PF2E ─────────── --}}
+    <div class="sss-tab {{#if ss.is.features}}is-active{{/if}}" data-sss-tabpanel="features">
+      <h3 class="sss-panel-title">Dotes</h3>
+
+      <div class="sss-search">
+        <i class="fas fa-search"></i>
+        <input type="text" placeholder="Buscar dotes…" data-sss-filter="features">
+      </div>
+
+      {{!-- Árbol de habilidades: un peldaño por nivel, del 1 al 20.
+            Lo ganado va en color; lo que falta, apagado. --}}
+      <div class="sss-tree">
+        {{#each ss.features.tree.levels}}
+          <section class="sss-tier {{#if reached}}is-reached{{else}}is-locked{{/if}} {{#if current}}is-current{{/if}}"
+                   data-sss-tier="{{level}}">
+            <div class="sss-tier-rail">
+              <span class="sss-tier-node">{{level}}</span>
+            </div>
+
+            <div class="sss-tier-body">
+              {{#if empty}}
+                <p class="sss-tier-empty">—</p>
+              {{else}}
+                {{#each nodes}}
+                  {{#if owned}}
+                    <div class="sss-node is-owned {{#unless active}}is-passive{{/unless}}"
+                         data-sss-item="{{id}}" data-sss-entry data-name="{{name}}" draggable="true">
+                      <img class="sss-node-img" src="{{img}}" alt="" draggable="false">
+                      <span class="sss-node-name">{{name}}<em>{{categoryLabel}}</em></span>
+                      {{#if hasUses}}<span class="sss-node-uses">{{uses.value}}/{{uses.max}}</span>{{/if}}
+                      {{#if active}}
+                        <button type="button" class="sss-mini-btn" data-action="sss-use" data-item-id="{{id}}">Usar</button>
+                      {{/if}}
+                    </div>
+                  {{else}}
+                    <div class="sss-node is-future" data-sss-entry data-name="{{name}}"
+                         data-tooltip="Se gana a nivel {{../level}}{{#if source}} · {{source}}{{/if}}">
+                      <img class="sss-node-img" src="{{img}}" alt="" draggable="false">
+                      <span class="sss-node-name">{{name}}</span>
+                      {{#if optional}}<span class="sss-node-tag">opcional</span>{{/if}}
+                    </div>
+                  {{/if}}
+                {{/each}}
+              {{/if}}
+            </div>
+          </section>
+        {{/each}}
+      </div>
+
+      {{!-- Rasgos que no cuelgan de ningún nivel: dotes sueltas, cosas del DM --}}
+      {{#if ss.features.tree.loose.length}}
+        <section class="sss-block">
+          <h4 class="sss-block-title">Sin nivel asignado</h4>
+          <ul class="sss-list">
+            {{#each ss.features.tree.loose}}
+              <li class="sss-row sss-row-item" data-sss-entry data-sss-item="{{id}}" data-item-id="{{id}}" data-name="{{name}}">
+                <img class="sss-row-img" src="{{img}}" alt="" draggable="false">
+                <span class="sss-row-name">{{name}}<em>{{categoryLabel}}</em></span>
+                {{#if hasUses}}<span class="sss-row-uses">{{uses.value}}/{{uses.max}}</span>{{/if}}
+                {{#if active}}
+                  <button type="button" class="sss-mini-btn" data-action="sss-use" data-item-id="{{id}}">Usar</button>
+                {{/if}}
+              </li>
+            {{/each}}
+          </ul>
+        </section>
+      {{/if}}
+
+      {{#unless ss.features.total}}
+        <p class="sss-empty">Sin dotes todavía.</p>
+      {{/unless}}
+    </div>
+
+    {{!-- ─────────── BIOGRAFÍA ─────────── --}}
+    <div class="sss-tab {{#if ss.is.biography}}is-active{{/if}}" data-sss-tabpanel="biography">
+      <h3 class="sss-panel-title">Biografía</h3>
+      <div class="sss-bio-meta">
+        {{#if ss.identity.race}}<span><b>Raza</b> {{ss.identity.race}}</span>{{/if}}
+        {{#if ss.identity.classText}}<span><b>Clase</b> {{ss.identity.classText}}</span>{{/if}}
+        {{#if ss.identity.background}}<span><b>Trasfondo</b> {{ss.identity.background}}</span>{{/if}}
+      </div>
+      <div class="sss-bio">{{{ss.identity.biography}}}</div>
+    </div>
+
+    {{!-- ─────────── EFECTOS ─────────── --}}
+    <div class="sss-tab {{#if ss.is.effects}}is-active{{/if}}" data-sss-tabpanel="effects">
+      <div class="sss-effects-head">
+        <h3 class="sss-panel-title">Efectos</h3>
+        {{#if ss.editable}}
+          <button type="button" class="sss-effect-add" data-action="sss-create-effect">
+            <i class="fas fa-plus"></i><span>Nuevo efecto</span>
+          </button>
+        {{/if}}
+      </div>
+      {{#if ss.effects.length}}
+        <ul class="sss-list sss-effect-list">
+          {{#each ss.effects}}
+            <li class="sss-row sss-row-item sss-effect-row {{#if disabled}}is-off{{/if}} {{#if suppressed}}is-suppressed{{/if}}">
+              <img class="sss-row-img" src="{{img}}" alt="" draggable="false">
+              <span class="sss-row-name">
+                {{name}}
+                {{#if source}}<em>{{source}}</em>{{/if}}
+                {{#if suppressed}}<small><i class="fas fa-shield-slash"></i> Suprimido por el sistema</small>{{/if}}
+              </span>
+              {{#if editable}}
+                <span class="sss-effect-actions">
+                  <button type="button" class="sss-mini-btn" data-action="sss-toggle-effect" data-effect-uuid="{{uuid}}"
+                          data-tooltip="{{#if disabled}}Activar efecto{{else}}Desactivar efecto{{/if}}">
+                    <i class="fas {{#if disabled}}fa-toggle-off{{else}}fa-toggle-on{{/if}}"></i>
+                  </button>
+                  <button type="button" class="sss-mini-btn" data-action="sss-edit-effect" data-effect-uuid="{{uuid}}"
+                          data-tooltip="Editar efecto"><i class="fas fa-pen-to-square"></i></button>
+                  <button type="button" class="sss-mini-btn is-danger" data-action="sss-delete-effect" data-effect-uuid="{{uuid}}"
+                          data-tooltip="Borrar efecto"><i class="fas fa-trash"></i></button>
+                </span>
+              {{/if}}
+            </li>
+          {{/each}}
+        </ul>
+      {{else}}
+        <p class="sss-empty">Sin efectos. Puedes agregar uno manualmente.</p>
+      {{/if}}
+    </div>
+
+  </section>
+</form>

@@ -1,5 +1,17 @@
 # Changelog — Talespire Foundry Sheets by Velvet
 
+## 1.1.0 — Hoja D&D 5e para dnd5e 6 y TaleSpire
+
+- La hoja D&D 5e vuelve a la misma base que «Stoneshard Sheet By Fatmorbus». La prueba de heredar de `CharacterActorSheet` (ApplicationV2 de dnd5e 6) ocultaba la barra de título y dejaba la hoja en tres columnas dentro del Symbiote; con la base anterior se recuperan la cabecera y el diseño Symbiote Optimized automático.
+- En el Symbiote, la cabecera muestra solo iconos con tooltip para que «Hoja completa», «Separar ventana» y cerrar no se salgan del panel.
+- Usar objetos y actividades entrega el evento de clic a dnd5e 6 (atajos de ventaja y de saltar diálogo), sin pasar la hoja como padre de sus diálogos V2.
+- Características, salvaciones, habilidades y salvación de muerte reciben el evento de clic y ya no reintentan con la firma antigua tras un error: cancelar los dados en TaleSpire ya no provoca una segunda tirada.
+- El ataque de conjuro usa `D20Roll` de dnd5e: marca críticos y pifias y viaja a TaleSpire con Foundry Rolls Bridge 1.3.0.
+- «Hoja completa» abre bien tanto hojas ApplicationV2 (dnd5e 6, Tidy 5e) como V1.
+- «Separar ventana» funciona en hojas ApplicationV2: Foundry 14 ejecuta `onClick`, no `callback`.
+- Los errores de las acciones muestran la excepción real y quedan en `globalThis.TALESPIRE_SHEET_LAST_ERROR` y en la bandera `lastActionError` del actor. Cerrar un diálogo o retirar los dados en TaleSpire no cuenta como error.
+- El registro de la hoja usa `DocumentSheetConfig` en Foundry 13+.
+
 ## 1.0.0 — Nuevo módulo
 
 - Separado de «Stoneshard Sheet PF2e & 5e - By Fatmorbus» 3.5.2 con el identificador `talespire-foundrysheets-by-velvet`.

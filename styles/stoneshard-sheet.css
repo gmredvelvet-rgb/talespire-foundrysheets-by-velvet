@@ -69,6 +69,25 @@
 .sss-window .window-header a:hover { color: var(--sss-gold); text-shadow: none; }
 .sss-window .window-header .sss-open-full { color: var(--sss-gold); }
 
+/* Symbiote: el panel de TaleSpire mide ~450 px y los botones con texto
+   empujaban fuera el cierre. Solo iconos; el nombre queda en el tooltip. */
+.sss-window.sss-layout-symbiote:not(.stoneshard-pf2e-real) .window-header .window-title {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.sss-window.sss-layout-symbiote:not(.stoneshard-pf2e-real) .window-header .header-button {
+  flex: 0 0 auto;
+  margin-left: 8px;
+  font-size: 0;
+}
+.sss-window.sss-layout-symbiote:not(.stoneshard-pf2e-real) .window-header .header-button > i {
+  margin: 0;
+  font-size: 13px;
+}
+
 .sss-window .window-content {
   padding: 0;
   background: url("../assets/ui/stone_tile.png") repeat;

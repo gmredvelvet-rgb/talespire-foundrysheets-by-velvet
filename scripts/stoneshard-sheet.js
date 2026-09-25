@@ -133,6 +133,11 @@ function compactWidth() {
   return Math.max(340, Math.min(520, window.innerWidth - 8));
 }
 
+/** dnd5e 4.1 pasó de claves sueltas (`rollSkill("acr")`) a objetos de configuración. */
+function usesRollConfigApi() {
+  return !foundry.utils.isNewerVersion("4.1.0", game.system?.version ?? "0");
+}
+
 function sheetWidth() {
   if (narrowClient()) return compactWidth();
   return sheetLayout() === "symbiote-optimized" ? 520 : 1040;
@@ -527,6 +532,11 @@ Hooks.once("init", () => {
     onChange: () => rerenderOpenSheets()
   });
 
+  // Misma base que la hoja de Fatmorbus. La hoja V2 de dnd5e 6
+  // (CharacterActorSheet) trae su propia cabecera, clases dnd5e2 y partes de
+  // plantilla que esta hoja no usa: heredarla ocultaba la barra de título y
+  // rompía el diseño compacto del Symbiote. Los diálogos de actividades de
+  // dnd5e se abren sueltos cuando no reciben una hoja padre.
   const Base =
     globalThis.dnd5e?.applications?.actor?.ActorSheet5eCharacter ??
     foundry.appv1?.sheets?.ActorSheet ??
@@ -1540,6 +1550,8 @@ Hooks.once("init", () => {
         icon: "fas fa-book-open",
         onclick: () => this._openFullSheet()
       });
+      // En el Symbiote la cabecera muestra solo iconos; el tooltip conserva el nombre.
+      for (const button of buttons) button.tooltip ??= game.i18n.localize(button.label ?? "");
       return buttons;
     }
 
@@ -1554,13 +1566,11 @@ Hooks.once("init", () => {
           Object.values(sheets).find((s) => !String(s.id ?? "").startsWith(MODULE_ID));
         const entry = tidy ?? fallback;
         if (!entry?.cls) return ui.notifications?.warn("No encontré otra hoja registrada.");
-        let app;
-        try {
-          app = new entry.cls(this.actor, { id: `sss-full-${this.actor.id}` });
-        } catch {
-          app = new entry.cls({ document: this.actor, id: `sss-full-${this.actor.id}` });
-        }
-        app.render(true);
+        // La hoja oficial de dnd5e 6 y Tidy 5e son ApplicationV2; otras hojas pueden seguir en V1.
+        const id = `sss-full-${this.actor.id}`;
+        const isV2 = foundry.utils.isSubclass(entry.cls, foundry.applications?.api?.ApplicationV2 ?? class {});
+        const app = isV2 ? new entry.cls({ document: this.actor, id }) : new entry.cls(this.actor, { id });
+        app.render(isV2 ? { force: true } : true);
       } catch (error) {
         console.error(`${MODULE_ID} | hoja completa`, error);
         ui.notifications?.warn("No fue posible abrir la otra hoja. Cámbiala desde la configuración de hoja del actor.");
@@ -1756,8 +1766,30 @@ Hooks.once("init", () => {
             event.stopPropagation();
             try { await handler(el, event); }
             catch (error) {
-              console.error(`${MODULE_ID} | Error en "${action}"`, error);
-              ui.notifications?.warn("No fue posible completar la acción.");
+              // Diálogo cerrado (dnd5e rechaza sin motivo) o dados retirados en
+              // TaleSpire: el bridge ya avisa y no hay nada que diagnosticar.
+              if (error == null || error?.name === "TaleSpireRollCancelled") return;
+              const message = String(error?.message ?? error ?? "Error desconocido");
+              const diagnostic = {
+                action,
+                message,
+                stack: String(error?.stack ?? "").slice(0, 8000),
+                actorId: this.actor?.id ?? null,
+                actorName: this.actor?.name ?? null,
+                userId: game.user?.id ?? null,
+                timestamp: Date.now()
+              };
+              globalThis.TALESPIRE_SHEET_LAST_ERROR = diagnostic;
+              console.error(`${MODULE_ID} | Error en "${action}"`, diagnostic, error);
+              try {
+                if (this.actor?.isOwner) {
+                  await this.actor.setFlag(MODULE_ID, "lastActionError", diagnostic);
+                }
+              }
+              catch (flagError) {
+                console.warn(`${MODULE_ID} | No se pudo guardar el diagnóstico`, flagError);
+              }
+              ui.notifications?.error(`Stoneshard: ${message}`, { permanent: true });
             }
           });
         });
@@ -1773,18 +1805,18 @@ Hooks.once("init", () => {
       on("sss-adjust-portrait", () => this._adjustPortrait());
       on("sss-portrait-reset", () => this._resetPortrait());
 
-      on("sss-roll-ability", (el) => this._rollAbility(el.dataset.ability, "check"));
-      on("sss-roll-save", (el) => this._rollAbility(el.dataset.ability, "save"));
-      on("sss-roll-skill", (el) => this._rollSkill(el.dataset.skill));
+      on("sss-roll-ability", (el, event) => this._rollAbility(el.dataset.ability, "check", event));
+      on("sss-roll-save", (el, event) => this._rollAbility(el.dataset.ability, "save", event));
+      on("sss-roll-skill", (el, event) => this._rollSkill(el.dataset.skill, event));
       on("sss-initiative", () => this.actor.rollInitiative?.({ createCombatants: true }));
-      on("sss-roll-death", () => this._rollDeathSave());
+      on("sss-roll-death", (_el, event) => this._rollDeathSave(event));
 
       on("sss-short-rest", () => this.actor.shortRest?.());
       on("sss-long-rest", () => this.actor.longRest?.());
 
       on("sss-death", (el) => this._setDeathSaves(el.dataset.kind, Number(el.dataset.n)));
-      on("sss-use", (el) => this._useItem(el.dataset.itemId));
-      on("sss-use-activity", (el) => this._useActivity(el.dataset.itemId, el.dataset.activityId));
+      on("sss-use", (el, event) => this._useItem(el.dataset.itemId, event));
+      on("sss-use-activity", (el, event) => this._useActivity(el.dataset.itemId, el.dataset.activityId, event));
       on("sss-filter", (el) => this._applyFilter(el.dataset.group, root));
       on("sss-spell-level", (el) => this._applySpellLevel(el.dataset.level, root));
       on("sss-slot-pip", (el) => this._spendSlot(el.dataset.key, Number(el.dataset.index), false));
@@ -1832,42 +1864,32 @@ Hooks.once("init", () => {
     /**
      * Prueba o salvación de característica.
      * dnd5e cambió los nombres entre 3.x y 4/5.x, así que se prueban en orden
-     * y se cae al primero disponible.
+     * y se cae al primero disponible. La firma se elige por versión: reintentar
+     * tras un error volvería a tirar (p. ej. al cancelar los dados en TaleSpire).
      */
-    async _rollAbility(ability, kind) {
+    async _rollAbility(ability, kind, event) {
       if (!ability) return;
       const actor = this.actor;
       const names = kind === "save"
         ? ["rollSavingThrow", "rollAbilitySave"]
         : ["rollAbilityCheck", "rollAbilityTest"];
-      for (const name of names) {
-        if (typeof actor[name] === "function") {
-          // 4.x/5.x esperan un objeto de configuración; 3.x, la clave suelta.
-          try { return await actor[name]({ ability }); }
-          catch (_error) { return await actor[name](ability); }
-        }
-      }
-      ui.notifications?.warn("Este sistema no expone tiradas de característica.");
+      const name = names.find((candidate) => typeof actor[candidate] === "function");
+      if (!name) return ui.notifications?.warn("Este sistema no expone tiradas de característica.");
+      return usesRollConfigApi() ? actor[name]({ ability, event }) : actor[name](ability, { event });
     }
 
-    async _rollSkill(skill) {
+    async _rollSkill(skill, event) {
       if (!skill) return;
       const actor = this.actor;
-      if (typeof actor.rollSkill === "function") {
-        try { return await actor.rollSkill({ skill }); }
-        catch (_error) { return await actor.rollSkill(skill); }
-      }
-      ui.notifications?.warn("Este sistema no expone tiradas de habilidad.");
+      if (typeof actor.rollSkill !== "function") return ui.notifications?.warn("Este sistema no expone tiradas de habilidad.");
+      return usesRollConfigApi() ? actor.rollSkill({ skill, event }) : actor.rollSkill(skill, { event });
     }
 
-    async _rollDeathSave() {
+    async _rollDeathSave(event) {
       const actor = this.actor;
-      for (const name of ["rollDeathSave", "rollDeath"]) {
-        if (typeof actor[name] === "function") {
-          try { return await actor[name]({}); }
-          catch (_error) { return await actor[name](); }
-        }
-      }
+      const name = ["rollDeathSave", "rollDeath"].find((candidate) => typeof actor[candidate] === "function");
+      if (!name) return;
+      return actor[name]({ event });
     }
 
     /** Marca N éxitos/fallos; volver a pulsar la última casilla la desmarca. */
@@ -1881,24 +1903,29 @@ Hooks.once("init", () => {
 
     /* ------------------------ Objetos y efectos ------------------------ */
 
-    async _useItem(itemId) {
+    async _useItem(itemId, event) {
       const item = this.actor.items.get(itemId);
       if (!item) return;
       const sound = useSoundFor(item);
-      if (typeof item.use === "function") await item.use();
+      // Sin hoja padre: esta hoja es ApplicationV1 y los diálogos V2 de dnd5e se abren sueltos.
+      if (typeof item.use === "function") {
+        await item.use({ event, legacy: false });
+      }
       else item.sheet?.render(true);
       if (sound) play(sound);
     }
 
-    async _useActivity(itemId, activityId) {
+    async _useActivity(itemId, activityId, event) {
       const item = this.actor.items.get(itemId);
       if (!item) return;
       const activities = item.system?.activities;
       const activity = activities?.get?.(activityId)
         ?? activities?.contents?.find?.((entry) => entry.id === activityId || entry._id === activityId)
         ?? null;
-      if (activity && typeof activity.use === "function") return activity.use();
-      return this._useItem(itemId);
+      if (activity && typeof activity.use === "function") {
+        return activity.use({ event });
+      }
+      return this._useItem(itemId, event);
     }
 
     async _togglePrepared(itemId) {
@@ -2722,7 +2749,10 @@ Hooks.once("init", () => {
     async _rollSpellAttack() {
       const book = this._buildSpellbook();
       if (!book.canRollAttack) return ui.notifications?.warn("Este personaje no lanza conjuros.");
-      await new Roll(`1d20 ${book.attack}`).toMessage({
+      // D20Roll de dnd5e: marca críticos y pifias, y Foundry Rolls Bridge la lanza en TaleSpire.
+      const RollClass = CONFIG.Dice.D20Roll ?? Roll;
+      const roll = new RollClass(`1d20 ${book.attack}`, this.actor.getRollData(), { criticalSuccess: 20, criticalFailure: 1 });
+      await roll.toMessage({
         speaker: ChatMessage.getSpeaker({ actor: this.actor }),
         flavor: "Ataque de conjuro"
       });
@@ -3563,12 +3593,19 @@ Hooks.once("init", () => {
     }
   };
 
-  const collection = foundry.documents?.collections?.Actors ?? Actors;
-  collection.registerSheet(MODULE_ID, StoneshardSheet, {
+  const sheetOptions = {
     types: ["character"],
     makeDefault: false,
     label: "SSSHEET.SheetLabel"
-  });
+  };
+  // Foundry 13+ registra hojas (V1 o V2) por DocumentSheetConfig; Actors.registerSheet queda obsoleto.
+  const SheetConfig = foundry.applications?.apps?.DocumentSheetConfig;
+  if (SheetConfig) {
+    SheetConfig.registerSheet(Actor, MODULE_ID, StoneshardSheet, sheetOptions);
+  } else {
+    const collection = foundry.documents?.collections?.Actors ?? Actors;
+    collection.registerSheet(MODULE_ID, StoneshardSheet, sheetOptions);
+  }
 
   console.info(`${MODULE_ID} | Hoja Stoneshard registrada.`);
 });

@@ -200,7 +200,8 @@ Hooks.on("getHeaderControlsApplicationV2", (app, controls) => {
     label: "Separar ventana",
     icon: "fa-solid fa-up-right-from-square",
     visible: true,
-    callback: () => detachSheet(app)
+    // Foundry 13+ solo ejecuta onClick en los controles de cabecera V2.
+    onClick: () => detachSheet(app)
   });
 });
 

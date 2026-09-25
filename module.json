@@ -2,7 +2,7 @@
   "id": "talespire-foundrysheets-by-velvet",
   "title": "Talespire Foundry Sheets by Velvet",
   "description": "Hoja de personaje estilo Stoneshard para D&D 5e y Pathfinder 2e, optimizada para usarse dentro del Symbiote de TaleSpire. En PF2e hereda de la hoja oficial para conservar acciones, tiradas, inventario, conjuros, crafting, feats, efectos y automatizaciones. Diseño de una columna automático en TaleSpire y pantallas estrechas.",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "authors": [
     {
       "name": "GM RedVelvet",
@@ -29,7 +29,7 @@
         "type": "system",
         "compatibility": {
           "minimum": "4.0.0",
-          "verified": "5.2.5"
+          "verified": "6.0.5"
         }
       },
       {
